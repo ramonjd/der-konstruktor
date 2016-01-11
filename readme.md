@@ -1,7 +1,7 @@
 Der Konstruktor
 -------------------------
 
-** Dev
+##Dev
 
 ```
 npm install
@@ -9,14 +9,14 @@ npm run dev
 ```
 
 
-** Test
+##Test
 
 ```
 npm run test
 ```
 
 
-** Prod
+##Prod
 
 ```
 npm run build:production
