@@ -1,6 +1,8 @@
-import * as types from './actionTypes'
-import * as yt from './youtube'
+import * as action_types from './actionTypes'
+import * as you_tube from './youtube'
+import * as time_units from './timeUnits'
 
 
-export const actionTypes = types
-export const youtube = yt
+export const actionTypes = action_types
+export const youtube = you_tube
+export const timeUnits = time_units
