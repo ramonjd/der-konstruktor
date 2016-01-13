@@ -1,45 +1,36 @@
-import {actionTypes} from '../constants/'
+import {actionTypes, youtube} from '../constants/'
+import axios from 'axios'
 
-export function get(data) {
+function youtubeRequest() {
     return {
-        type: actionTypes.GET_CONFIGS,
+        type: actionTypes.SEARCH_RESULTS_REQUEST
+    }
+}
+
+function youtubeSuccess(data) {
+    return {
+        type: actionTypes.SEARCH_RESULTS_SUCCESS,
         data
     }
 }
 
-export function add(data) {
+function youtubeFailure() {
     return {
-        type: actionTypes.ADD_CONFIG,
-        data
-    }
-}
-
-export function del(id) {
-    return {
-        type: actionTypes.DELETE_CONFIG,
-        id
+        type: actionTypes.SEARCH_RESULTS_FAILURE
     }
 }
 
 
-export function getConfigs() {
+export function search(query) {
     return (dispatch, getState) => {
-        // get all configs here
-        dispatch(get({}))
+        dispatch(youtubeRequest())
+        return axios.get(youtube.API_URL + query).then((response) => {
+                dispatch(youtubeSuccess(response.data))
+            })
+            .catch((response) => {
+                dispatch(youtubeFailure(response))
+            })
     }
 }
 
 
-export function addConfig(data) {
-    return (dispatch, getState) => {
-        // add config here
-        dispatch(add({}))
-    }
-}
-
-export function deleteConfig(id) {
-    return (dispatch, getState) => {
-        // delete config here
-        dispatch(del({}))
-    }
-}

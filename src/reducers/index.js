@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import config from './config'
+import search from './search'
 
 const rootReducer = combineReducers({
-    config
+    search
 })
 
 export default rootReducer

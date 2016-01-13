@@ -1,13 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
+import thunkMiddleware from 'redux-thunk'
 import rootReducer from '../reducers/'
 
+const createStoreWithMiddleware = applyMiddleware(
+    thunkMiddleware
+)(createStore)
+
 export default function configureStore(initialState) {
-
-    const createStoreWithMiddleware = compose(
-        applyMiddleware(thunk)
-    )(createStore)
-
     const store = createStoreWithMiddleware(rootReducer, initialState)
 
     if (module.hot) {

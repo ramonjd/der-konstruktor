@@ -5,13 +5,15 @@ import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions  from '../actions/'
-import Button from '../components/Button'
-
+import Search from '../components/Search'
+import SearchContainer from '../components/SearchContainer'
 
 function mapStateToProps(state) {
-    const { config } = state
+    const { search } = state
+
     return {
-        config
+        results : search.results,
+        isFetching : search.isFetching
     }
 }
 
@@ -24,30 +26,39 @@ function mapDispatchToProps(dispatch) {
 export default class App extends Component {
 
     static propTypes = {
-        config:  PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        results:  PropTypes.object.isRequired,
+        isFetching:  PropTypes.bool,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
 
     constructor(props) {
         super(props)
+        this.searchYouTube = this.searchYouTube.bind(this)
     }
 
     componentWillMount() {
     }
 
+    searchYouTube(q) {
+        const {actions} = this.props
+        actions.search(q)
+    }
+
     render() {
-        const {config, actions} = this.props
-        console.log('App : config', config)
+        const {isFetching, results} = this.props
+        console.log('App : results', results)
+        console.log('App : isFetching', isFetching)
         return (
-            <div className="App">
-                <header role="banner">
+            <div className='App'>
+                <header>
                     <h1>App</h1>
                 </header>
-            <main>
-                <section>
-                    <Button>Button Component</Button>
-                </section>
-            </main>
+                <main>
+                    <section>
+                        <Search handleSearch={this.searchYouTube} isFetching={isFetching}/>
+                        <SearchContainer data={results}/>
+                    </section>
+                </main>
             </div>
         )
     }

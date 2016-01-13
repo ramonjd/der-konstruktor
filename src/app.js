@@ -4,13 +4,8 @@ import { Provider } from 'react-redux'
 import configureStore from './stores/appStore'
 import App from './containers/App'
 
-// just for now
-const initialState =  {
-    config : [{}],
-    router : {}
-}
 
-const store = configureStore(initialState)
+const store = configureStore()
 
 const ROOT_ELEM = document.getElementById('app')
 
