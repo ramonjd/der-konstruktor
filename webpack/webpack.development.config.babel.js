@@ -3,11 +3,11 @@
 import path from 'path'
 import webpack from 'webpack'
 import WebpackErrorNotificationPlugin from 'webpack-error-notification'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+//import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 
 const host = process.env.HOST || 'localhost';
-const port = (process.env.PORT + 1) || 9999;
+const port = (process.env.PORT + 1) || 8888;
 
 const config = {
     devtool: 'source-map',
@@ -20,10 +20,11 @@ const config = {
         filename: 'bundle.js',
         chunkFilename: '[name].bundle.js',
         path:  path.join(__dirname, '/build/'),
-        //publicPath: 'http://' + host + ':' + port + '/build/'
+        publicPath: 'http://' + host + ':' + port + '/build/'
     },
     module: {
         loaders: [
+            { test: /\.json$/, loader: 'json-loader' },
             { test: /\.js$/, exclude: /node_modules/, loaders: ['react-hot', 'babel?cacheDirectory'] },
             { test: /\.scss$/, loaders: ['style', 'css', 'autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap=true&sourceMapContents=true'] },
             { test: /\.(jpe?g|png|gif|svg)$/, loader: 'file' }
@@ -39,12 +40,14 @@ const config = {
             }
         }),
         new webpack.NoErrorsPlugin(),
-        new WebpackErrorNotificationPlugin(),
-        new HtmlWebpackPlugin({
+        new WebpackErrorNotificationPlugin()
+
+
+/*        new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'src/index.html',
             inject: 'body'
-        })
+        })*/
 
     ]
 

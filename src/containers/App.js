@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import * as actions  from '../actions/'
 import Search from '../components/Search'
 import SearchContainer from '../components/SearchContainer'
+import Scheduler from '../components/Scheduler'
 
 function mapStateToProps(state) {
     const { search } = state
@@ -56,6 +57,7 @@ export default class App extends Component {
                 <main>
                     <section>
                         <p>Current Crons</p>
+                        <Scheduler />
                         <Search handleSearch={this.searchYouTube} isFetching={isFetching}/>
                         <SearchContainer data={results}/>
                     </section>

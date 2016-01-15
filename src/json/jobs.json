@@ -1,0 +1,15 @@
+{
+  "jobs" : [
+    {
+      "title": "Test",
+      "minute" : 0,
+      "hour": 9,
+      "dayOfMonth": "*",
+      "month" : "*",
+      "dayOfWeek": "*",
+      "videoId" : "e01xjNoD4FM",
+      "start" : 0,
+      "end" : 0
+    }
+  ]
+}
