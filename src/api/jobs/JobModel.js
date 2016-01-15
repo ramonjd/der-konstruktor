@@ -1,7 +1,11 @@
-import schedule from 'node-schedule'
-import JSONFile from 'json-file'
+import jsonfile from 'jsonfile'
+import find from 'lodash/find'
+import remove from 'lodash/remove'
 import each from 'lodash/each'
-
+import sortBy from 'lodash/sortBy'
+import merge from 'lodash/merge'
+import path from 'path'
+import util from 'util'
 
 // https://github.com/node-schedule/node-schedule
 /*
@@ -21,31 +25,114 @@ import each from 'lodash/each'
  ]
  }*/
 
-let currentJobs = []
 
-export function loadJobs() {
-    let jsonFile = JSONFile.read('../json/jobs.json')
-    let jobs = this.jsonFile.get('jobs') || null
-    if (!jobs) {
-        jsonFile.set('jobs', [])
+
+// set up dev and prod paths in config for json file
+// dev in same directory
+// prod in json/json
+let filePath = path.join(__dirname, '../../../json/jobs.json')
+const defaultJSON = []
+
+jsonfile.readFile(filePath, function(err, obj) {
+    if (err) {
+        jsonfile.writeFile(filePath, defaultJSON, {spaces: 2}, function(err) {
+            if (err) {
+                console.error(err)
+            } else {
+                console.log('JSON created: ' + filePath)
+            }
+        })
     }
-    each(jobs, (job, i) => {
-        //let cron = [
-        //    job.minute,
-        //    job.hour,
-        //    job.dayOfMonth,
-        //    job.month,
-        //    job.dayOfWeek
-        //]
-        //let j = schedule.scheduleJob(cron.join(' '), ()=> {
-        //    // play job.videoId job.title job.start job.end
-        //})
-        currentJobs.push[j]
-    })
-}
+})
 
+export default class JobModel {
 
-export function getJobs() {
-    return currentJobs
+    constructor(properties) {
+        let {minute, hour, dayOfMonth, month, dayOfWeek, title, videoId, start, end } = properties
+        this.job =  {
+            created : new Date(),
+            minute,
+            hour,
+            dayOfMonth,
+            month,
+            dayOfWeek,
+            title,
+            videoId,
+            start,
+            end
+        }
+    }
+
+    static get(callback) {
+        jsonfile.readFile(filePath, (err, obj) => {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, sortBy(obj, (o) => { return o.created }))
+            }
+        })
+    }
+
+    static findById(id, callback) {
+        jsonfile.readFile(filePath, (err, obj) => {
+            if (err) {
+                callback(err)
+            } else {
+                let result = find(obj, (o) => { return o.videoId === id })
+                callback(null, result)
+            }
+        })
+    }
+
+    static findByIdAndUpdate(id, data, callback) {
+        jsonfile.readFile(filePath, (err, obj) => {
+            if (err) {
+                callback(err)
+            } else {
+                each(obj, (o) => {
+                    if (o.videoId === id) {
+                        merge(o, data)
+                    }
+                })
+                callback(null, sortBy(obj, (o) => { return o.created }))
+            }
+        })
+    }
+
+    static findByIdAndRemove(id, callback) {
+        jsonfile.readFile(filePath, (err, obj) => {
+            if (err) {
+                callback(err)
+            } else {
+                remove(obj, (o) => {
+                    o.videoId === id
+                })
+                jsonfile.writeFile(filePath, obj,  (err) => {
+                    if (err) {
+                        callback(err)
+                    }else {
+                        callback(null, sortBy(obj, (o) => { return o.created }))
+                    }
+                })
+            }
+        })
+    }
+
+    save(callback) {
+        jsonfile.readFile(filePath, (err, obj) => {
+            if (err) {
+                callback(err)
+            } else {
+                obj.push(this.job)
+                jsonfile.writeFile(filePath, obj,  (err) => {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, sortBy(obj, (o) => { return o.created }))
+                    }
+                })
+            }
+        })
+    }
 }
 

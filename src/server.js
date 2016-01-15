@@ -1,11 +1,10 @@
 /* eslint no-console: 0 */
 //import config from '../config/'
-import path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import compression from 'compression'
-//import api from './api/'
+import api from './api/'
 
 // Initialize express server
 export default function(callback) {
@@ -16,11 +15,11 @@ export default function(callback) {
     server.set('views', './src/views')
     server.set('view engine', 'jade')
     server.use(morgan(server.get('env') === 'production' ? 'combined' : 'development'))
-    server.use(bodyParser.json())
     server.use(bodyParser.urlencoded({ extended: false }))
+    server.use(bodyParser.json())
     server.use(compression())
 
-    //api(server)
+    api(server)
     server.get('/*', (req, res) => {
         res.status(200)
             .render('index',  {})

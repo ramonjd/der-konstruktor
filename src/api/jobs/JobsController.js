@@ -3,9 +3,9 @@ import JobModel from './JobModel'
 const JobsController  = {
 
     all(req, res, next) {
-        JobModel.get((err, users) => {
+        JobModel.get((err, jobs) => {
             if (!err) {
-                res.status(200).json(users)
+                res.status(200).json(jobs)
             } else {
                 res.status(500).json(err)
             }
@@ -13,22 +13,20 @@ const JobsController  = {
     },
 
     getJobById(req, res, next) {
-        JobModel.findById(req.params.id,  (err, user)=> {
+        JobModel.findById(req.params.id,  (err, job)=> {
             if (!err) {
-                res.json(user);
+                res.json(job);
             } else {
                 res.status(500).json(err)
             }
         });
     },
 
-
     updateJobById(req, res, next) {
-
         JobModel.
-        findByIdAndUpdate(req.body.id, req.body.data, (err, user) => {
+        findByIdAndUpdate(req.body.id, req.body.data, (err, job) => {
             if (!err) {
-                res.status(200).json(user)
+                res.status(200).json(job)
             } else {
                 res.json(422, err);
             }
@@ -36,18 +34,19 @@ const JobsController  = {
     },
     deleteJobById(req, res, next) {
         JobModel.
-        findByIdAndRemove(req.params.id, (err, user) => {
+        findByIdAndRemove(req.params.id, (err) => {
             if (!err) {
-                res.status(200).json(user)
+                res.status(200)
             } else {
                 res.status(422).json(err)
             }
         });
     },
     createJob(req, res, next) {
-        JobModel.save(req.body, (err, user) => {
+        let Job = new JobModel(req.body)
+        Job.save((err, jobs) => {
             if (!err) {
-                res.status(201).json(user)
+                res.status(201).json(jobs)
             } else {
                 return next(err);
             }

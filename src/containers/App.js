@@ -7,14 +7,17 @@ import { connect } from 'react-redux'
 import * as actions  from '../actions/'
 import Search from '../components/Search'
 import SearchContainer from '../components/SearchContainer'
-import Scheduler from '../components/Scheduler'
+import Jobs from '../components/Jobs'
+import Player from '../components/Player'
 
 function mapStateToProps(state) {
-    const { search } = state
+    const { search, jobs } = state
 
     return {
-        results : search.results,
-        isFetching : search.isFetching
+        jobs : jobs.results,
+        isFetchingJobs : jobs.isFetching,
+        videos : search.results,
+        isFetchingVideos : search.isFetching
     }
 }
 
@@ -27,28 +30,28 @@ function mapDispatchToProps(dispatch) {
 export default class App extends Component {
 
     static propTypes = {
-        results:  PropTypes.object.isRequired,
-        isFetching:  PropTypes.bool,
+        jobs:  PropTypes.array,
+        videos:  PropTypes.object.isRequired,
+        isFetchingJobs:  PropTypes.bool,
+        isFetchingVideos:  PropTypes.bool,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
 
     constructor(props) {
         super(props)
-        this.searchYouTube = this.searchYouTube.bind(this)
     }
 
     componentWillMount() {
-    }
-
-    searchYouTube(q) {
-        const {actions} = this.props
-        actions.search(q)
+        this.props.actions.getJobs()
     }
 
     render() {
-        const {isFetching, results} = this.props
-        console.log('App : results', results)
-        console.log('App : isFetching', isFetching)
+        const {isFetchingVideos, isFetchingJobs, videos, jobs, actions} = this.props
+        console.log('App : jobs', jobs)
+        console.log('App : videos', videos)
+        console.log('App : isFetchingVideos', isFetchingVideos)
+        console.log('App : isFetchingJobs', isFetchingJobs)
+
         return (
             <div className='App'>
                 <header>
@@ -57,9 +60,10 @@ export default class App extends Component {
                 <main>
                     <section>
                         <p>Current Crons</p>
-                        <Scheduler />
-                        <Search handleSearch={this.searchYouTube} isFetching={isFetching}/>
-                        <SearchContainer data={results}/>
+                        <Jobs data={jobs} isFetching={isFetchingJobs} />
+                        <Player videoId={} />
+                        <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>
+                        <SearchContainer data={videos}/>
                     </section>
                 </main>
             </div>
