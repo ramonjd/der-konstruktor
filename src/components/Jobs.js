@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
+import Button from './Button'
 
 export default class Jobs extends Component {
 
@@ -22,6 +23,7 @@ export default class Jobs extends Component {
                         return (
                             <li key={ i }>
                                 {item.title}
+                                <Button>Delete</Button>
                             </li>)
                     }) : null }
                 </ul>

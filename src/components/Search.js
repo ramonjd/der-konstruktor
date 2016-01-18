@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import axios from 'axios'
-import {oAuth} from '../constants/'
 import SearchContainer from './SearchContainer'
 import Button from './Button'
 import { search } from '../actions/'

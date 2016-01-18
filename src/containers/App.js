@@ -9,6 +9,9 @@ import Search from '../components/Search'
 import SearchContainer from '../components/SearchContainer'
 import Jobs from '../components/Jobs'
 import Player from '../components/Player'
+import Scheduler from '../components/Scheduler'
+
+
 
 function mapStateToProps(state) {
     const { search, jobs } = state
@@ -17,7 +20,8 @@ function mapStateToProps(state) {
         jobs : jobs.results,
         isFetchingJobs : jobs.isFetching,
         videos : search.results,
-        isFetchingVideos : search.isFetching
+        isFetchingVideos : search.isFetching,
+        selectedVideo : search.selected
     }
 }
 
@@ -32,6 +36,7 @@ export default class App extends Component {
     static propTypes = {
         jobs:  PropTypes.array,
         videos:  PropTypes.object.isRequired,
+        selectedVideo:  PropTypes.object,
         isFetchingJobs:  PropTypes.bool,
         isFetchingVideos:  PropTypes.bool,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
@@ -39,19 +44,26 @@ export default class App extends Component {
 
     constructor(props) {
         super(props)
+        this.onSelectVideoHandler = this.onSelectVideoHandler.bind(this)
+        this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
     }
 
     componentWillMount() {
         this.props.actions.getJobs()
     }
 
-    render() {
-        const {isFetchingVideos, isFetchingJobs, videos, jobs, actions} = this.props
-        console.log('App : jobs', jobs)
-        console.log('App : videos', videos)
-        console.log('App : isFetchingVideos', isFetchingVideos)
-        console.log('App : isFetchingJobs', isFetchingJobs)
+    onSelectVideoHandler(videoId){
+        this.props.actions.selectVideo(videoId)
+    }
 
+    onSelectScheduleHandler(schedule){
+        const {selectedVideo} = this.props
+        console.log('App : onSelectScheduleHandler', schedule);
+        //this.props.actions.selectVideo(videoId)
+    }
+
+    render() {
+        const {isFetchingVideos, isFetchingJobs, videos, jobs, selectedVideo, actions} = this.props
         return (
             <div className='App'>
                 <header>
@@ -61,9 +73,10 @@ export default class App extends Component {
                     <section>
                         <p>Current Crons</p>
                         <Jobs data={jobs} isFetching={isFetchingJobs} />
-                        <Player videoId={} />
+                        <Player video={selectedVideo} />
+                        {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
                         <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>
-                        <SearchContainer data={videos}/>
+                        <SearchContainer data={videos} onSelectVideo={this.onSelectVideoHandler}/>
                     </section>
                 </main>
             </div>

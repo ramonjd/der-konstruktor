@@ -7,6 +7,30 @@ import merge from 'lodash/merge'
 import path from 'path'
 import util from 'util'
 
+/*
+
+ import Cron from 'cron.js'
+
+
+ let data = {
+ days: [1, 2, 3, 4, 5, 6],
+ startTime: '18:30:00'
+ };
+
+
+ // make
+ new Cron( data, { shorten: true } ).expression;        //  '* 30 18 * * 1-6 *'
+ new Cron( data, { numeric: false } ).expression;        //  '* 30 18 * * SUN,MON,TUE,WED,THU,FRI *'
+ new Cron( { days: ['FRI', 'SAT'] } ).expression;        //  '* * * * * 6,7 *'
+ Cron.make( data, { numeric: false, shorten: true } );  //  '* 30 18 * * SUN-FRI *'
+
+ //parse
+ Cron.parse('* 30 18 * * 1-3');    // { days: [1, 2, 3], startTime: '18:30:00' }
+ Cron.parse('* 30 18 * * 1,3,6');  // { days: [1, 3, 6], startTime: '18:30:00' }
+ Cron.parse('* * 12 * * SUN-SAT'); // { days: [1, 2, 3, 4, 5, 6, 7], startTime: '12:00:00' }
+ */
+
+
 // https://github.com/node-schedule/node-schedule
 /*
  {
@@ -48,7 +72,7 @@ jsonfile.readFile(filePath, function(err, obj) {
 export default class JobModel {
 
     constructor(properties) {
-        let {minute, hour, dayOfMonth, month, dayOfWeek, title, videoId, start, end } = properties
+        let {minute, hour, dayOfMonth, month, dayOfWeek, title, videoId, thumbnail, start, end } = properties
         this.job =  {
             created : new Date(),
             minute,
@@ -58,6 +82,7 @@ export default class JobModel {
             dayOfWeek,
             title,
             videoId,
+            thumbnail,
             start,
             end
         }

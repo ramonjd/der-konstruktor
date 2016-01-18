@@ -5,7 +5,6 @@ import YouTube from '../lib/YouTube'
 let getInitialState = () => {
     return {
         playbackState: 'stopped',
-        videoId: '',
         opts : {
             width: 320,
             height: 180,
@@ -20,7 +19,7 @@ let getInitialState = () => {
 
 export default class Player extends Component {
     static propTypes = {
-        videoId:  PropTypes.string.isRequired
+        video:  PropTypes.object
     };
 
     constructor(props) {
@@ -55,12 +54,11 @@ export default class Player extends Component {
     }
 
     render() {
-        const {videoId} = this.props
+        const {video} = this.props
         return (
             <div className='SearchContainer'>
-                <h2>Selected Video</h2>
-                {this.state.videoId ? <YouTube
-                    videoId={videoId}
+                {video && video.id ? <YouTube
+                    videoId={video.id.videoId}
                     opts={this.state.opts}
                     onPlay={this.handlePlayVideo}
                     onPause={this.handlePauseVideo}

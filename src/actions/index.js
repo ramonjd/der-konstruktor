@@ -22,6 +22,13 @@ function youtubeFailure() {
     }
 }
 
+function youtubeSelectVideo(state, id) {
+    return {
+        type: actionTypes.SEARCH_RESULTS_SELECT,
+        state,
+        id
+    }
+}
 
 export function search(query) {
     return (dispatch, getState) => {
@@ -32,6 +39,12 @@ export function search(query) {
             .catch((response) => {
                 dispatch(youtubeFailure(response))
             })
+    }
+}
+
+export function selectVideo(videoId) {
+    return (dispatch, getState) => {
+        dispatch(youtubeSelectVideo(getState(), videoId))
     }
 }
 

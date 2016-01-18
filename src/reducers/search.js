@@ -1,9 +1,11 @@
 import {actionTypes} from '../constants/'
+import find from 'lodash/find'
 
 
 const initialState = {
     isFetching: false,
-    results : {}
+    results : {},
+    selected : {}
 }
 
 export default function search(state = initialState, action = {}) {
@@ -16,6 +18,11 @@ export default function search(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 isFetching: false,
                 results : action.data
+            })
+        case actionTypes.SEARCH_RESULTS_SELECT:
+            let selected = find(state.results.items, (o) => { return o.id.videoId === action.id })
+            return Object.assign({}, state, {
+                selected : selected
             })
         default:
             return state
