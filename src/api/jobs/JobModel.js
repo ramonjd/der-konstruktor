@@ -70,21 +70,14 @@ jsonfile.readFile(filePath, function(err, obj) {
 })
 
 export default class JobModel {
-
     constructor(properties) {
-        let {minute, hour, dayOfMonth, month, dayOfWeek, title, videoId, thumbnail, start, end } = properties
+        let {cron, title, videoId, thumbnail } = properties
         this.job =  {
             created : new Date(),
-            minute,
-            hour,
-            dayOfMonth,
-            month,
-            dayOfWeek,
+            cron,
             title,
             videoId,
-            thumbnail,
-            start,
-            end
+            thumbnail
         }
     }
 
@@ -130,12 +123,15 @@ export default class JobModel {
                 callback(err)
             } else {
                 remove(obj, (o) => {
-                    o.videoId === id
+                    return o.videoId === id
                 })
-                jsonfile.writeFile(filePath, obj,  (err) => {
+
+                jsonfile.writeFile(filePath, obj, (err) => {
                     if (err) {
                         callback(err)
                     }else {
+                        console.log('findByIdAndRemove jsonfile.writeFile', obj);
+
                         callback(null, sortBy(obj, (o) => { return o.created }))
                     }
                 })

@@ -24,6 +24,10 @@ export default function search(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 selected : selected
             })
+        case actionTypes.SEARCH_RESULTS_UNSELECT:
+            return Object.assign({}, state, {
+                selected : {}
+            })
         default:
             return state
     }

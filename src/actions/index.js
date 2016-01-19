@@ -30,6 +30,13 @@ function youtubeSelectVideo(state, id) {
     }
 }
 
+function youtubeClearSelectedVideo(state) {
+    return {
+        type: actionTypes.SEARCH_RESULTS_UNSELECT,
+        state
+    }
+}
+
 export function search(query) {
     return (dispatch, getState) => {
         dispatch(youtubeRequest())
@@ -45,6 +52,12 @@ export function search(query) {
 export function selectVideo(videoId) {
     return (dispatch, getState) => {
         dispatch(youtubeSelectVideo(getState(), videoId))
+    }
+}
+
+export function clearSelectedVideo(videoId) {
+    return (dispatch, getState) => {
+        dispatch(youtubeClearSelectedVideo(getState()))
     }
 }
 

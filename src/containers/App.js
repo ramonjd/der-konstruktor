@@ -53,13 +53,21 @@ export default class App extends Component {
     }
 
     onSelectVideoHandler(videoId){
-        this.props.actions.selectVideo(videoId)
+        const {actions} = this.props
+        actions.selectVideo(videoId)
     }
 
     onSelectScheduleHandler(schedule){
-        const {selectedVideo} = this.props
-        console.log('App : onSelectScheduleHandler', schedule);
-        //this.props.actions.selectVideo(videoId)
+        const {selectedVideo, actions} = this.props
+        const newSchedule = {
+            cron : schedule,
+            title : selectedVideo.snippet.title,
+            videoId : selectedVideo.id.videoId,
+            thumbnail : selectedVideo.snippet.thumbnails.default.url
+        }
+        actions.createJob(newSchedule);
+        actions.clearSelectedVideo()
+
     }
 
     render() {
@@ -72,7 +80,7 @@ export default class App extends Component {
                 <main>
                     <section>
                         <p>Current Crons</p>
-                        <Jobs data={jobs} isFetching={isFetchingJobs} />
+                        <Jobs data={jobs} isFetching={isFetchingJobs} onDeleteSchedule={actions.deleteJobByVideoId} />
                         <Player video={selectedVideo} />
                         {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
                         <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>

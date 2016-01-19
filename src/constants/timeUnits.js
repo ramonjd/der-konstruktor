@@ -1,11 +1,11 @@
 export const HOURS = [
     {
         name: '08',
-        value: '8'
+        value: '08'
     },
     {
         name: '09',
-        value: '9'
+        value: '09'
     },
     {
         name: '10',
@@ -44,7 +44,7 @@ export const HOURS = [
 export const MINUTES = [
     {
         name: '00',
-        value: '0'
+        value: '00'
     },
     {
         name: '15',
@@ -83,7 +83,16 @@ export const DAYS = [
     }
 ]
 
-export const MONETHS = [
+export const DAY_MAP = {
+    '1': 'Monday',
+    '2': 'Tuesday',
+    '3': 'Wednesday',
+    '4': 'Thursday',
+    '5': 'Friday'
+}
+
+
+export const MONTHS = [
     {
         name: 'January',
         value: '1'
