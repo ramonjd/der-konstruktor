@@ -18,7 +18,6 @@ export default class Jobs extends Component {
 
     parseCron(cronString) {
         const cronData = Cron.parse(cronString)
-        console.log(cronData);
         let daysString = ''
         forEach(cronData.days, (value, key) => {
             daysString += timeUnits.DAY_MAP[value] + ' '
@@ -34,7 +33,6 @@ export default class Jobs extends Component {
 
     render() {
         const {data, onDeleteSchedule} = this.props
-
         return (
             <div className='Jobs'>
                 <h2>Jobs</h2>

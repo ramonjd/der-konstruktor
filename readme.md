@@ -1,5 +1,10 @@
-Der Konstruktor
+Schedule me Youtube
 -------------------------
+
+To do:
+- ability to enter videoId manually
+- fade out using youtube volume
+- select seconds manually
 
 ##Dev
 

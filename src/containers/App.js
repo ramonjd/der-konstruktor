@@ -11,7 +11,7 @@ import Jobs from '../components/Jobs'
 import Player from '../components/Player'
 import Scheduler from '../components/Scheduler'
 
-
+const socket = io.connect('http://localhost:9999')
 
 function mapStateToProps(state) {
     const { search, jobs } = state
@@ -28,7 +28,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return { actions : bindActionCreators(actions, dispatch) }
 }
-
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class App extends Component {
@@ -50,6 +49,13 @@ export default class App extends Component {
 
     componentWillMount() {
         this.props.actions.getJobs()
+        socket.emit('schedule.create')
+        socket.on('schedule.count',  (data) => {
+            console.log(data);
+        })
+        socket.on('schedule.trigger',  (data) => {
+            console.log(data);
+        })
     }
 
     onSelectVideoHandler(videoId){
@@ -65,7 +71,9 @@ export default class App extends Component {
             videoId : selectedVideo.id.videoId,
             thumbnail : selectedVideo.snippet.thumbnails.default.url
         }
-        actions.createJob(newSchedule);
+        actions.createJob(newSchedule, ()=>{
+            socket.emit('schedule.create')
+        })
         actions.clearSelectedVideo()
 
     }

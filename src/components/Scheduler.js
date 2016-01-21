@@ -51,11 +51,6 @@ export default class Scheduler extends Component {
         this.buttonClickHandler = this.buttonClickHandler.bind(this)
     }
 
-    componentWillMount() {
-        // if jobs, then schedule them
-        // https://github.com/node-schedule/node-schedule
-    }
-
     setDays(e) {
         let days = this.state.days
         if (e.target.checked === true) {
@@ -94,7 +89,7 @@ export default class Scheduler extends Component {
                 <h3>At</h3>
                 <SelectList options={timeUnits.HOURS} onChange={this.setHour}/>
                 <span>:</span>
-                <SelectList options={timeUnits.MINUTES} onChange={this.setMinute}/>
+                <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes}/>
                 <Button onClick={this.buttonClickHandler}>Schedule</Button>
             </div>
         )

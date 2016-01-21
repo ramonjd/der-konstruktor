@@ -38,8 +38,9 @@ export default class SearchContainer extends Component {
                     { data.items && data.items.length ? map(data.items, (item, i) => {
                         if (item.id.videoId) {
                             return (
-                                <li key={ i } className={item.id.videoId === this.state.videoId ? 'active' : ''}>
-                                    <img id={item.id.videoId} onClick={this.handleSelectVideo} title={item.snippet.title} src={item.snippet.thumbnails.default.url} alt={item.snippet.description} />
+                                <li key={ i } className={item.id.videoId === this.state.videoId ? 'active' : ''} id={item.id.videoId} onClick={this.handleSelectVideo} >
+                                    <h3>{item.snippet.title}</h3>
+                                    <img title={item.snippet.title} src={item.snippet.thumbnails.default.url} alt={item.snippet.description} />
                                 </li>)
                         }
                     }) : null }
