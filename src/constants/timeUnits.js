@@ -45,14 +45,33 @@ export const MINUTES = [
     {
         name: '00',
         value: '0'
+    },    {
+        name: '05',
+        value: '51'
+    },
+    {
+        name: '10',
+        value: '10'
     },
     {
         name: '15',
         value: '15'
     },
     {
+        name: '20',
+        value: '20'
+    },
+    {
+        name: '25',
+        value: '25'
+    },
+    {
         name: '30',
         value: '30'
+    },
+    {
+        name: '35',
+        value: '35'
     },
     {
         name: '40',

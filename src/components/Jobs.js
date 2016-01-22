@@ -20,7 +20,7 @@ export default class Jobs extends Component {
         // 45 13 * * 4-5
         const cronData = cronString.split(' ')
         const days = cronData[4].split('-')
-        let startTime = cronData[1] + '' + cronData[0]
+        let startTime = cronData[1] + ':' + (cronData[0].length === 1 ? '0' + cronData[0] : cronData[0])
         let daysString = ''
         forEach(days, (value, key) => {
             daysString += timeUnits.DAY_MAP[value] + ' '
@@ -30,7 +30,7 @@ export default class Jobs extends Component {
         }
         return (<div className="JobTime">
             <h3>Scheduled for:</h3>
-            <p><strong>[ {daysString} ] {startTime}</strong></p>
+            <p><strong>Every [ {daysString} ] {startTime}</strong></p>
         </div>)
     }
 

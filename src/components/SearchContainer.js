@@ -21,12 +21,12 @@ export default class SearchContainer extends Component {
     }
 
     handleSelectVideo(e) {
+        e.preventDefault()
         const {onSelectVideo} = this.props
         this.setState({
             videoId: e.target.id
         })
         onSelectVideo(e.target.id)
-        e.preventDefault()
     }
 
     render() {
@@ -45,7 +45,6 @@ export default class SearchContainer extends Component {
                         }
                     }) : null }
                 </ul>
-                <p>Buttons: Schedule every [weekday or mon/tues/wed/thur/fri] at [time] </p>
             </div>
         )
     }
