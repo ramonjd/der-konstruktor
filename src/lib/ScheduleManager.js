@@ -29,31 +29,40 @@ export function clearJobs(jobs){
 
 export function registerJobs(socket){
 
+   return new Promise(
+        function (resolve, reject) {
 
-    // return promise here
 
-    jsonfile.readFile(filePath, (err, obj) => {
-        if (err) {
-            console.error(err)
-        } else {
-            clearJobs()
-            console.log(obj)
+            jsonfile.readFile(filePath, (err, obj) => {
+                if (err) {
+                    console.error(err)
+                    reject(err)
+                } else {
+                    clearJobs()
+                    console.log(obj)
 
-            let scheduledJobCallback = (io, videoId) => {
-                let callback = () => {
-                    socket.emit('schedule.trigger', { videoId: videoId })
+                    let scheduledJobCallback = (videoId) => {
+                        let callback = () => {
+                            socket.emit('schedule.trigger', { videoId: videoId })
+                        }
+                        return callback
+                    }
+
+                    forEach(obj, (job) => {
+                        let j = schedule.scheduleJob(job.cron, scheduledJobCallback(job.videoId))
+                        scheduledJobs.push(j)
+
+                    })
+                    resolve(scheduledJobs)
                 }
-                return callback
-            }
-
-            forEach(obj, (job) => {
-                let j = schedule.scheduleJob(job.cron, scheduledJobCallback(job.videoId))
-                scheduledJobs.push(j)
             })
-        }
-    })
 
-    return scheduledJobs
+
+
+
+
+        })
+
 
 
 }

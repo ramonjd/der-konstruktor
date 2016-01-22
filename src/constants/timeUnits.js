@@ -44,7 +44,7 @@ export const HOURS = [
 export const MINUTES = [
     {
         name: '00',
-        value: '00'
+        value: '0'
     },
     {
         name: '15',
@@ -55,8 +55,20 @@ export const MINUTES = [
         value: '30'
     },
     {
+        name: '40',
+        value: '40'
+    },
+    {
         name: '45',
         value: '45'
+    },
+    {
+        name: '50',
+        value: '50'
+    },
+    {
+        name: '55',
+        value: '55'
     }
 ]
 

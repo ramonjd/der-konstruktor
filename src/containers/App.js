@@ -54,7 +54,8 @@ export default class App extends Component {
             console.log(data);
         })
         socket.on('schedule.trigger',  (data) => {
-            console.log(data);
+            actions.selectVideo(data.videoId)
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1', data);
         })
     }
 

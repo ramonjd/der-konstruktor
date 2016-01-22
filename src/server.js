@@ -53,7 +53,7 @@ export default function(callback) {
 
 
     const httpServer = http.createServer(app).listen(app.get('port'), ()=>{
-        console.log("Express server listening on port " + app.get('port'));
+        console.log('Express server listening on port ' + app.get('port'));
         callback(app)
     });
 
@@ -67,7 +67,15 @@ io.sockets.on('connection', (socket) => {
     socket.on('schedule.create',  () => {
         // create schedules
         console.log('schedule.create - client requested this');
-        socket.emit('schedule.count', { count: registerJobs(socket).length})
+        registerJobs(socket)
+            .then(data => {
+                socket.emit('schedule.count', { count: data.length})
+            })
+            .catch(error => {
+                socket.emit('schedule.count', { error: true})
+            })
+
+
     })
 })
 

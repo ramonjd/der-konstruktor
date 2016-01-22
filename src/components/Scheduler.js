@@ -38,6 +38,7 @@ let getInitialState = () => {
     }
 }
 
+let cronPattern = '%minutes% %hour% * * %day%'
 
 export default class Scheduler extends Component {
     static propTypes = {};
@@ -70,13 +71,20 @@ export default class Scheduler extends Component {
     }
 
     buttonClickHandler(e) {
+
+        // validate here
+
         const {onSchedule} = this.props
         const timeData = {
             days: this.state.days,
             startTime: this.state.hour + ':' + this.state.minutes + ':00'
         }
-        const cronString = new Cron(timeData, {shorten: true}).expression;
-        onSchedule(cronString)
+
+        const dayString = this.state.days.length > 1 ? this.state.days[0] + '-' + this.state.days[this.state.days.length-1]  : this.state.days[0];
+        const cronExpression =  cronPattern.replace('%minutes%', this.state.minutes).replace('%hour%', this.state.hour).replace('%day%', dayString)
+console.log(cronExpression)
+        //const cronString = new Cron(timeData).expression;
+        onSchedule(cronExpression)
         e.preventDefault()
     }
 
