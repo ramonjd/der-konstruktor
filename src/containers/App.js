@@ -49,14 +49,15 @@ export default class App extends Component {
 
     componentWillMount() {
         const {actions} = this.props
+
         actions.getJobs()
+
         socket.emit('schedule.create')
+
         socket.on('schedule.count',  (data) => {
             console.log(data);
         })
         socket.on('schedule.trigger',  (data) => {
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1', data);
-
             actions.selectVideo(data.videoId)
         })
     }

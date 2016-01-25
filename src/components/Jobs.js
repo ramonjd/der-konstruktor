@@ -1,3 +1,7 @@
+if (process.env.BROWSER) {
+    require('../scss/Jobs.scss')
+}
+
 import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
@@ -43,9 +47,11 @@ export default class Jobs extends Component {
                     { data && data.length ? map(data, (item, i) => {
                         return (
                             <li key={ i }>
-                                {item.title} - {this.parseCron(item.cron)}
-                                <img title={item.title} src={item.thumbnail} alt={item.title}/>
-                                <Button onClick={onDeleteSchedule.bind(this, item.videoId)}>Delete</Button>
+                                <div>
+                                    {item.title} - {this.parseCron(item.cron)}
+                                    <img title={item.title} src={item.thumbnail} alt={item.title}/>
+                                    <Button onClick={onDeleteSchedule.bind(this, item.videoId)}>Delete</Button>
+                                </div>
                             </li>)
                     }) : null }
                 </ul>

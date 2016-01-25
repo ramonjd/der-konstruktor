@@ -1,3 +1,8 @@
+if (process.env.BROWSER) {
+    require('../scss/Search.scss')
+}
+
+
 import React, { Component, PropTypes } from 'react'
 import axios from 'axios'
 import SearchContainer from './SearchContainer'

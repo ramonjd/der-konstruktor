@@ -20,13 +20,13 @@ export default class SearchContainer extends Component {
         this.handleSelectVideo = this.handleSelectVideo.bind(this)
     }
 
-    handleSelectVideo(e) {
+    handleSelectVideo(id, e) {
         e.preventDefault()
         const {onSelectVideo} = this.props
         this.setState({
-            videoId: e.target.id
+            videoId: id
         })
-        onSelectVideo(e.target.id)
+        onSelectVideo(id)
     }
 
     render() {
@@ -38,9 +38,9 @@ export default class SearchContainer extends Component {
                     { data.items && data.items.length ? map(data.items, (item, i) => {
                         if (item.id.videoId) {
                             return (
-                                <li key={ i } className={item.id.videoId === this.state.videoId ? 'active' : ''} id={item.id.videoId} onClick={this.handleSelectVideo} >
-                                    <h3>{item.snippet.title}</h3>
-                                    <img title={item.snippet.title} src={item.snippet.thumbnails.default.url} alt={item.snippet.description} />
+                                <li key={ i } className={item.id.videoId === this.state.videoId ? 'active' : ''} id={item.id.videoId}>
+                                    <h3 onClick={this.handleSelectVideo.bind(this, item.id.videoId)}>{item.snippet.title}</h3>
+                                    <img title={item.snippet.title} src={item.snippet.thumbnails.default.url} alt={item.snippet.description} onClick={this.handleSelectVideo.bind(this, item.id.videoId)} />
                                 </li>)
                         }
                     }) : null }

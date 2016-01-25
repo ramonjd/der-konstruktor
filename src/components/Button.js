@@ -1,3 +1,7 @@
+if (process.env.BROWSER) {
+    require('../scss/Button.scss')
+}
+
 import React, { Component, PropTypes } from 'react'
 
 export default class Button extends Component {
