@@ -90,13 +90,18 @@ export default class App extends Component {
                     <h1>App</h1>
                 </header>
                 <main>
-                    <section>
-                        <p>Current Crons</p>
-                        <Jobs data={jobs} isFetching={isFetchingJobs} onDeleteSchedule={actions.deleteJobByVideoId} />
-                        <Player video={selectedVideo} />
-                        {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
-                        <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>
-                        <SearchContainer data={videos} onSelectVideo={this.onSelectVideoHandler}/>
+                    <section className="flex">
+                        <div>
+                            <Jobs data={jobs} isFetching={isFetchingJobs} onDeleteSchedule={actions.deleteJobByVideoId} />
+                        </div>
+                        <div>
+                            <Player video={selectedVideo} />
+                            {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
+                        </div>
+                        <div>
+                            <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>
+                            <SearchContainer data={videos} onSelectVideo={this.onSelectVideoHandler}/>
+                        </div>
                     </section>
                 </main>
             </div>

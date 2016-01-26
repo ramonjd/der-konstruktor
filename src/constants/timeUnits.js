@@ -93,23 +93,23 @@ export const MINUTES = [
 
 export const DAYS = [
     {
-        name: 'Monday',
+        name: 'Mon',
         value: '1'
     },
     {
-        name: 'Tuesday',
+        name: 'Tue',
         value: '2'
     },
     {
-        name: 'Wednesday',
+        name: 'Wed',
         value: '3'
     },
     {
-        name: 'Thursday',
+        name: 'Thu',
         value: '4'
     },
     {
-        name: 'Friday',
+        name: 'Fri',
         value: '5'
     }
 ]

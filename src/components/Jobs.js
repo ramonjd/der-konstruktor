@@ -33,7 +33,6 @@ export default class Jobs extends Component {
             startTime = ' at ' + startTime
         }
         return (<div className="JobTime">
-            <h3>Scheduled for:</h3>
             <p><strong>Every [ {daysString} ] {startTime}</strong></p>
         </div>)
     }
@@ -47,9 +46,9 @@ export default class Jobs extends Component {
                     { data && data.length ? map(data, (item, i) => {
                         return (
                             <li key={ i }>
+                                <img title={item.title} src={item.thumbnail} alt={item.title}/>
                                 <div>
                                     {item.title} - {this.parseCron(item.cron)}
-                                    <img title={item.title} src={item.thumbnail} alt={item.title}/>
                                     <Button onClick={onDeleteSchedule.bind(this, item.videoId)}>Delete</Button>
                                 </div>
                             </li>)

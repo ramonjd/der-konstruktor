@@ -15,7 +15,7 @@ export default class Button extends Component {
     render() {
         let newClassName = this.props.className || ''
         let newTitle = this.props.title || ''
-        let type = this.props.type || 'button'
+        let type = this.props.type || 'Button'
         let onClick = this.props.onClick || (() => {})
         return (
             <button type={type} className={newClassName} onClick={onClick} title={newTitle}>{this.props.children}</button>
