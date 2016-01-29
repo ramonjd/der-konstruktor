@@ -1,3 +1,7 @@
+if (process.env.BROWSER) {
+    require('../scss/Scheduler.scss')
+}
+
 import React, { Component, PropTypes } from 'react'
 import Button from './Button'
 import SelectList from './SelectList'

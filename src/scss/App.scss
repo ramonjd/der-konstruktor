@@ -26,7 +26,6 @@ header {
   justify-content: center;
   & > div {
     min-height: 50px;
-    max-height: 50px;
     padding:20px;
     -webkit-transition: width 0.7s ease-out;
     transition: width 0.7s ease-out;
@@ -50,8 +49,19 @@ header {
     -webkit-flex-flow: column;
     flex-direction: column;;
     & > div {
-      -webkit-order: 0;
-      order: 0;
+
+      &:nth-child(1){
+        -webkit-order: 0;
+        order: 0;
+      }
+      &:nth-child(2){
+        -webkit-order: 0;
+        order: 0;
+      }
+      &:nth-child(3){
+        -webkit-order: 0;
+        order: 0;
+      }
     }
   }
 }

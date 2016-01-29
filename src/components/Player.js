@@ -1,3 +1,7 @@
+if (process.env.BROWSER) {
+    require('../scss/Player.scss')
+}
+
 // setTimeout. stop video at 30secs
 import React, { Component, PropTypes } from 'react'
 import YouTube from '../lib/YouTube'
@@ -6,8 +10,8 @@ let getInitialState = () => {
     return {
         playbackState: 'stopped',
         opts : {
-            width: 320,
-            height: 180,
+            width: 640,
+            height: 360,
             playerVars: {
                 autoplay : 1,
                 start : 0,
@@ -64,7 +68,7 @@ export default class Player extends Component {
         const {video} = this.props
         console.log('Player render', video);
         return (
-            <div className='SearchContainer'>
+            <div className='Player'>
                 {video && video.id ? <YouTube
                     videoId={video.id.videoId}
                     opts={this.state.opts}
