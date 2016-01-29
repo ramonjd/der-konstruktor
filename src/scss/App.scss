@@ -11,6 +11,14 @@ html {
   font-family: "Helvetica Neue", sans-serif;
 }
 
+h1, h2 {
+  margin:0 0 20px 0;
+}
+
+header {
+  padding:20px 20px 0 20px;
+}
+
 .flex {
 
   display: flex;
@@ -19,20 +27,20 @@ html {
   & > div {
     min-height: 50px;
     max-height: 50px;
-    width: 30px;
+    padding:20px;
     -webkit-transition: width 0.7s ease-out;
     transition: width 0.7s ease-out;
     &:nth-child(1){
       order: 1;
-      flex: 1 6 20%;
+      flex: 1 6 30%;
     }
     &:nth-child(2){
       order: 2;
-      flex: 3 1 60%;
+      flex: 3 1 40%;
     }
     &:nth-child(3){
       order: 3;
-      flex: 1 6 20%;
+      flex: 1 6 30%;
     }
   }
 }

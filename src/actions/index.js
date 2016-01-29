@@ -2,6 +2,39 @@ import {actionTypes, youtube, api} from '../constants/'
 import axios from 'axios'
 
 
+// ========================================= PLAYER
+function setPlayerVideo(data) {
+    return {
+        type: actionTypes.PLAYER_UPDATE_VIDEO,
+        data
+    }
+}
+
+function setPlayerIsPlaying(isPlaying) {
+    return {
+        type: actionTypes.PLAYER_IS_PLAYING,
+        isPlaying
+    }
+}
+
+export function setVideo(data) {
+    return (dispatch, getState) => {
+        dispatch(setPlayerVideo(data))
+    }
+}
+
+export function setIsPlaying(isPlaying) {
+    return (dispatch, getState) => {
+        dispatch(setPlayerIsPlaying(isPlaying))
+    }
+}
+
+export function unsetVideo() {
+    return (dispatch, getState) => {
+        dispatch(setPlayerVideo({}))
+    }
+}
+
 // ========================================= YOUTUBE
 function youtubeRequest() {
     return {
@@ -30,13 +63,6 @@ function youtubeSelectVideo(state, id) {
     }
 }
 
-function youtubeClearSelectedVideo(state) {
-    return {
-        type: actionTypes.SEARCH_RESULTS_UNSELECT,
-        state
-    }
-}
-
 export function search(query) {
     return (dispatch, getState) => {
         dispatch(youtubeRequest())
@@ -55,11 +81,7 @@ export function selectVideo(videoId) {
     }
 }
 
-export function clearSelectedVideo(videoId) {
-    return (dispatch, getState) => {
-        dispatch(youtubeClearSelectedVideo(getState()))
-    }
-}
+
 
 // ========================================= JOBS API
 
@@ -124,12 +146,20 @@ export function getJobs() {
 }
 
 export function deleteJobByVideoId(id) {
+    console.log('deleteJobByVideoId', id);
     return (dispatch, getState) => {
         dispatch(jobRequest())
-        return axios.delete(api.JOBS_URL + '/' + id).then((response) => {
+        return axios.delete(api.JOBS_URL + '/' + id, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => {
+                console.log('deleteJobByVideoId jobSuccess', response);
                 dispatch(jobSuccess(response.data))
             })
             .catch((response) => {
+                console.log('deleteJobByVideoId jobFailure', response);
+
                 dispatch(jobFailure(response))
             })
     }

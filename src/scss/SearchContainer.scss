@@ -1,0 +1,43 @@
+.SearchContainer {
+  ul {
+    list-style: none;
+  }
+
+  li {
+    position:relative;
+    overflow: hidden;
+    padding: 20px;
+    border-bottom:1px solid rgba(0,0,0,.1);
+
+    &:hover {
+      background: #ededed;
+    }
+    &.active {
+      background:#eee;
+    }
+  }
+
+
+  figure {
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  img {
+    display:block;
+    border:8px solid rgba(0,0,0,.1);
+    float:left;
+    margin:-0 10px 0 0;
+  }
+
+  figcaption {
+    padding-top:4px;
+    font-size: 12px;
+    h4, p {
+      margin-bottom:10px;
+    }
+    p {
+      font-size: .9em;
+    }
+  }
+}

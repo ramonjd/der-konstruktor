@@ -93,33 +93,33 @@ export const MINUTES = [
 
 export const DAYS = [
     {
-        name: 'Mon',
+        name: 'Monday',
         value: '1'
     },
     {
-        name: 'Tue',
+        name: 'Tuesday',
         value: '2'
     },
     {
-        name: 'Wed',
+        name: 'Wednesday',
         value: '3'
     },
     {
-        name: 'Thu',
+        name: 'Thursday',
         value: '4'
     },
     {
-        name: 'Fri',
+        name: 'Friday',
         value: '5'
     }
 ]
 
 export const DAY_MAP = {
-    '1': 'Monday',
-    '2': 'Tuesday',
-    '3': 'Wednesday',
-    '4': 'Thursday',
-    '5': 'Friday'
+    '1': 'M',
+    '2': 'Tu',
+    '3': 'W',
+    '4': 'Th',
+    '5': 'F'
 }
 
 

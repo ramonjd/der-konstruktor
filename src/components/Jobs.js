@@ -20,36 +20,38 @@ export default class Jobs extends Component {
         this.parseCron = this.parseCron.bind(this)
     }
 
-    parseCron(cronString) {
+    parseCron(cron) {
         // 45 13 * * 4-5
-        const cronData = cronString.split(' ')
-        const days = cronData[4].split('-')
-        let startTime = cronData[1] + ':' + (cronData[0].length === 1 ? '0' + cronData[0] : cronData[0])
+        let startTime = cron.hour + ':' + (cron.minute.length === 1 ? '0' + cron.minute : cron.minute)
+
         let daysString = ''
-        forEach(days, (value, key) => {
+        forEach(cron.dayOfWeek, (value, key) => {
             daysString += timeUnits.DAY_MAP[value] + ' '
         })
         if (daysString !== '') {
             startTime = ' at ' + startTime
         }
         return (<div className="JobTime">
-            <p><strong>Every [ {daysString} ] {startTime}</strong></p>
+            <p><em>Every {daysString} {startTime}</em></p>
         </div>)
     }
 
     render() {
-        const {data, onDeleteSchedule} = this.props
+        const {data, onDeleteSchedule, onSelectVideo} = this.props
+        //                                     {this.parseCron(item.cron)}
+
         return (
             <div className='Jobs'>
-                <h2>Jobs</h2>
+                <h2>Scheduled Jobs</h2>
                 <ul>
                     { data && data.length ? map(data, (item, i) => {
                         return (
-                            <li key={ i }>
-                                <img title={item.title} src={item.thumbnail} alt={item.title}/>
+                            <li key={ i } id={item.id}>
+                                <img title={item.video.snippet.title} src={item.video.snippet.thumbnails.default.url} alt={item.video.snippet.title} onClick={onSelectVideo.bind(this, item.video)}/>
                                 <div>
-                                    {item.title} - {this.parseCron(item.cron)}
-                                    <Button onClick={onDeleteSchedule.bind(this, item.videoId)}>Delete</Button>
+                                    <h4>{item.video.snippet.title}</h4>
+                                    {this.parseCron(item.cron)}
+                                    <Button onClick={onDeleteSchedule.bind(this, item.id)}>Delete</Button>
                                 </div>
                             </li>)
                     }) : null }

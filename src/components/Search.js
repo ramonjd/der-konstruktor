@@ -39,8 +39,9 @@ export default class Search extends Component {
     render() {
         const { isFetching } = this.props
         return (
-            <div className='Search' onSubmit={this.handleSubmit}>
-                <form>
+            <div className='Search'>
+                <h2>Search</h2>
+                <form onSubmit={this.handleSubmit}>
                     <label htmlFor='query'>
                         <input id='query' type='text'
                                autofocus

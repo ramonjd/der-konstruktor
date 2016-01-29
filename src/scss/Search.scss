@@ -1,7 +1,19 @@
 .Search {
+
+  margin-bottom:20px;
+  border:1px solid #ccc;
+  background-color:#eee;
+  padding:20px;
+
   input {
     border:1px solid #eee;
     padding:2px;
-    border-radius: 5px;
+    height:28px;
+    width:230px;
+    margin-right:10px;
+    background:#fff;
+    border:1px solid #ccc;
+    text-indent: 4px;
   }
+
 }

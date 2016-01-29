@@ -9,7 +9,6 @@ import socketIO from 'socket.io'
 import http from 'http'
 import {registerJobs} from './lib/ScheduleManager'
 
-
 // Initialize express server
 export default function(callback) {
     const app = express()
@@ -64,9 +63,9 @@ export default function(callback) {
 
 io.sockets.on('connection', (socket) => {
     console.log('socket.io server connection');
-    socket.on('schedule.create',  () => {
+    socket.on('schedule.created',  () => {
         // create schedules
-        console.log('schedule.create - client requested this');
+        console.log('schedule.created - client requested this');
         registerJobs(socket)
             .then(data => {
                 socket.emit('schedule.count', { count: data.length})

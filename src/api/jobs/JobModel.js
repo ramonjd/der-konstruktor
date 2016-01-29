@@ -25,15 +25,20 @@ jsonfile.readFile(filePath, function(err, obj) {
     }
 })
 
+
+function getRandom(videoId){
+    return videoId + Math.floor(Math.random() * 10000000000000000);
+}
+
+
 export default class JobModel {
     constructor(properties) {
-        let {cron, title, videoId, thumbnail } = properties
+        let {cron, video } = properties
         this.job =  {
             created : new Date(),
+            id : getRandom(video.id.videoId),
             cron,
-            title,
-            videoId,
-            thumbnail
+            video
         }
     }
 
@@ -64,7 +69,7 @@ export default class JobModel {
                 callback(err)
             } else {
                 each(obj, (o) => {
-                    if (o.videoId === id) {
+                    if (o.id === id) {
                         merge(o, data)
                     }
                 })
@@ -78,8 +83,10 @@ export default class JobModel {
             if (err) {
                 callback(err)
             } else {
+                console.log('findByIdAndRemove', id);
+
                 remove(obj, (o) => {
-                    return o.videoId === id
+                    return o.id === id
                 })
 
                 jsonfile.writeFile(filePath, obj, (err) => {

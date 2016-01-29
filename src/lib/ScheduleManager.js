@@ -2,6 +2,7 @@ import schedule from 'node-schedule'
 import forEach from 'lodash/forEach'
 import jsonfile from 'jsonfile'
 import path from 'path'
+import map from 'lodash/map'
 
 let filePath = path.join(__dirname, '../../json/jobs.json')
 let scheduledJobs = []
@@ -39,17 +40,28 @@ export function registerJobs(socket){
                     reject(err)
                 } else {
                     clearJobs()
-                    console.log(obj)
 
-                    let scheduledJobCallback = (videoId) => {
+                    let scheduledJobCallback = (job) => {
                         let callback = () => {
-                            socket.emit('schedule.trigger', { videoId: videoId })
+                            socket.emit('schedule.trigger', { job: job })
                         }
                         return callback
                     }
 
+
                     forEach(obj, (job) => {
-                        let j = schedule.scheduleJob(job.cron, scheduledJobCallback(job.videoId))
+
+                        let rule = new schedule.RecurrenceRule()
+                        rule.dayOfWeek = map(job.cron.dayOfWeek, (item) => {return parseInt(item)})
+                        rule.hour = parseInt(job.cron.hour)
+                        rule.minute = parseInt(job.cron.minute)
+
+                        var j = schedule.scheduleJob(rule, scheduledJobCallback(job))
+
+
+/*
+                        let j = schedule.scheduleJob(job.cron, scheduledJobCallback(job))
+*/
                         scheduledJobs.push(j)
 
                     })

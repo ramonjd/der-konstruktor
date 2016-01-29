@@ -32,13 +32,13 @@ import Cron from 'cron.js'
 
 let getInitialState = () => {
     return {
-        days: [],
+        dayOfWeek: [],
         hour: timeUnits.HOURS[0].value,
-        minutes: timeUnits.MINUTES[0].value
+        minute: timeUnits.MINUTES[0].value
     }
 }
 
-let cronPattern = '%minutes% %hour% * * %day%'
+let cronPattern = '%minute% %hour% * * %dayOfWeek%'
 
 export default class Scheduler extends Component {
     static propTypes = {};
@@ -53,13 +53,13 @@ export default class Scheduler extends Component {
     }
 
     setDays(e) {
-        let days = this.state.days
+        let dayOfWeek = this.state.dayOfWeek
         if (e.target.checked === true) {
-            days.push(e.target.value)
+            dayOfWeek.push(e.target.value)
         } else {
-            days = without(days, e.target.value)
+            dayOfWeek = without(dayOfWeek, e.target.value)
         }
-        this.setState({days: days.sort()});
+        this.setState({dayOfWeek: dayOfWeek.sort()});
     }
 
     setHour(e) {
@@ -67,7 +67,7 @@ export default class Scheduler extends Component {
     }
 
     setMinutes(e) {
-        this.setState({minutes: e.target.value});
+        this.setState({minute: e.target.value});
     }
 
     buttonClickHandler(e) {
@@ -76,15 +76,17 @@ export default class Scheduler extends Component {
 
         const {onSchedule} = this.props
         const timeData = {
-            days: this.state.days,
-            startTime: this.state.hour + ':' + this.state.minutes + ':00'
+            dayOfWeek: this.state.dayOfWeek,
+            startTime: this.state.hour + ':' + this.state.minute + ':00'
         }
 
-        const dayString = this.state.days.length > 1 ? this.state.days[0] + '-' + this.state.days[this.state.days.length-1]  : this.state.days[0];
-        const cronExpression =  cronPattern.replace('%minutes%', this.state.minutes).replace('%hour%', this.state.hour).replace('%day%', dayString)
-console.log(cronExpression)
+        const dayString = this.state.dayOfWeek.length > 1 ? this.state.dayOfWeek.join(',')  : this.state.dayOfWeek[0];
+        const cronExpression =  cronPattern.replace('%minute%', this.state.minute).replace('%hour%', this.state.hour).replace('%dayOfWeek%', dayString)
+        console.log(cronExpression)
         //const cronString = new Cron(timeData).expression;
-        onSchedule(cronExpression)
+
+        // testing with RecurrenceRule
+        onSchedule(this.state)
         e.preventDefault()
     }
 

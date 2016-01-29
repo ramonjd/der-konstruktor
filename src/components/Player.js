@@ -32,21 +32,28 @@ export default class Player extends Component {
     }
 
     handlePlayVideo(e) {
+
+        const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'playing'
         })
+        setIsPlaying(true)
     }
 
     handlePauseVideo(e) {
+        const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'paused'
         })
+        setIsPlaying(false)
     }
 
     handleStopVideo(e) {
+        const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'stopped'
         })
+        setIsPlaying(false)
     }
 
     handleReadyVideo(e) {
@@ -55,6 +62,7 @@ export default class Player extends Component {
 
     render() {
         const {video} = this.props
+        console.log('Player render', video);
         return (
             <div className='SearchContainer'>
                 {video && video.id ? <YouTube

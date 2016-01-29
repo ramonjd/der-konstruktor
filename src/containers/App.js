@@ -14,14 +14,15 @@ import Scheduler from '../components/Scheduler'
 const socket = io.connect('http://localhost:9999')
 
 function mapStateToProps(state) {
-    const { search, jobs } = state
+    const { search, jobs, player } = state
 
     return {
         jobs : jobs.results,
         isFetchingJobs : jobs.isFetching,
         videos : search.results,
         isFetchingVideos : search.isFetching,
-        selectedVideo : search.selected
+        selectedVideo : player.video
+
     }
 }
 
@@ -52,33 +53,34 @@ export default class App extends Component {
 
         actions.getJobs()
 
-        socket.emit('schedule.create')
+        socket.emit('schedule.created')
 
         socket.on('schedule.count',  (data) => {
             console.log(data);
         })
         socket.on('schedule.trigger',  (data) => {
-            actions.selectVideo(data.videoId)
+            console.log('schedule.trigger from socket', data);
+            actions.setVideo(data.job.video)
         })
     }
 
-    onSelectVideoHandler(videoId){
+    onSelectVideoHandler(videoData){
+        console.log('onSelectVideoHandler', videoData);
         const {actions} = this.props
-        actions.selectVideo(videoId)
+        actions.setVideo(videoData)
     }
+
 
     onSelectScheduleHandler(schedule){
         const {selectedVideo, actions} = this.props
         const newSchedule = {
             cron : schedule,
-            title : selectedVideo.snippet.title,
-            videoId : selectedVideo.id.videoId,
-            thumbnail : selectedVideo.snippet.thumbnails.default.url
+            video : selectedVideo
         }
-        actions.createJob(newSchedule, ()=>{
-            socket.emit('schedule.create')
+        actions.createJob(newSchedule, ()=> {
+            socket.emit('schedule.created')
         })
-        actions.clearSelectedVideo()
+        actions.unsetVideo()
 
     }
 
@@ -87,15 +89,15 @@ export default class App extends Component {
         return (
             <div className='App'>
                 <header>
-                    <h1>App</h1>
+                    <h1>Schedule me Youtube</h1>
                 </header>
                 <main>
                     <section className="flex">
                         <div>
-                            <Jobs data={jobs} isFetching={isFetchingJobs} onDeleteSchedule={actions.deleteJobByVideoId} />
+                            <Jobs data={jobs} isFetching={isFetchingJobs} onSelectVideo={this.onSelectVideoHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
                         <div>
-                            <Player video={selectedVideo} />
+                            <Player video={selectedVideo} setIsPlaying={actions.setIsPlaying}/>
                             {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
                         </div>
                         <div>
