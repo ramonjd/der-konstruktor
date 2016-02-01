@@ -1,3 +1,7 @@
+if (process.env.BROWSER) {
+    require('../scss/Checkboxes.scss')
+}
+
 import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 

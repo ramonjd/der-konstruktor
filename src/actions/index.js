@@ -105,6 +105,19 @@ function jobFailure() {
     }
 }
 
+function selectJob(data) {
+    return {
+        type: actionTypes.JOBS_SELECT_JOB,
+        data
+    }
+}
+
+
+export function setJob(data) {
+    return (dispatch, getState) => {
+        dispatch(selectJob(data))
+    }
+}
 
 export function createJob(data, callback) {
     return (dispatch, getState) => {

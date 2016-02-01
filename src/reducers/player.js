@@ -1,12 +1,9 @@
 import {actionTypes} from '../constants/'
 
-
 const initialState = {
     isPlaying : false,
     video : {}
 }
-
-
 
 export default function player(state = initialState, action = {}) {
     switch (action.type) {

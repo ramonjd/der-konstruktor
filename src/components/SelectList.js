@@ -1,3 +1,6 @@
+if (process.env.BROWSER) {
+    require('../scss/SelectList.scss')
+}
 import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 

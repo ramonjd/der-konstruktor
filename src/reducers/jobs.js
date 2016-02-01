@@ -3,7 +3,8 @@ import {actionTypes} from '../constants/'
 
 const initialState = {
     isFetching: false,
-    results : []
+    results : [],
+    selectedJob : {}
 }
 
 export default function jobs(state = initialState, action = {}) {
@@ -16,6 +17,10 @@ export default function jobs(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 isFetching: false,
                 results : action.data
+            })
+        case actionTypes.JOBS_SELECT_JOB:
+            return Object.assign({}, state, {
+                selectedJob : action.data
             })
         default:
             return state

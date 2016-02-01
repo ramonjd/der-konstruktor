@@ -21,8 +21,8 @@ function mapStateToProps(state) {
         isFetchingJobs : jobs.isFetching,
         videos : search.results,
         isFetchingVideos : search.isFetching,
-        selectedVideo : player.video
-
+        selectedVideo : player.video,
+        selectedJob : jobs.video
     }
 }
 
@@ -39,12 +39,14 @@ export default class App extends Component {
         selectedVideo:  PropTypes.object,
         isFetchingJobs:  PropTypes.bool,
         isFetchingVideos:  PropTypes.bool,
+        selectedJob:  PropTypes.object,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
 
     constructor(props) {
         super(props)
         this.onSelectVideoHandler = this.onSelectVideoHandler.bind(this)
+        this.onSelectJobHandler = this.onSelectJobHandler.bind(this)
         this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
     }
 
@@ -70,6 +72,11 @@ export default class App extends Component {
         actions.setVideo(videoData)
     }
 
+    onSelectJobHandler(videoData){
+        console.log('onSelectVideoHandler', videoData);
+        const {actions} = this.props
+        actions.setJob(videoData)
+    }
 
     onSelectScheduleHandler(schedule){
         const {selectedVideo, actions} = this.props
@@ -85,7 +92,7 @@ export default class App extends Component {
     }
 
     render() {
-        const {isFetchingVideos, isFetchingJobs, videos, jobs, selectedVideo, actions} = this.props
+        const {isFetchingVideos, isFetchingJobs, videos, jobs, selectedVideo, selectedJob, actions} = this.props
         return (
             <div className='App'>
                 <header>
@@ -94,10 +101,10 @@ export default class App extends Component {
                 <main>
                     <section className="flex">
                         <div>
-                            <Jobs data={jobs} isFetching={isFetchingJobs} onSelectVideo={this.onSelectVideoHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
+                            <Jobs data={jobs} selectedJob={selectedJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
                         <div>
-                            <Player video={selectedVideo} setIsPlaying={actions.setIsPlaying}/>
+                            <Player selectedVideo={selectedVideo} selectedJob={selectedJob} setIsPlaying={actions.setIsPlaying} />
                             {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
                         </div>
                         <div>

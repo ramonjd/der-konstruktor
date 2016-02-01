@@ -47,7 +47,7 @@ export const MINUTES = [
         value: '0'
     },    {
         name: '05',
-        value: '51'
+        value: '05'
     },
     {
         name: '10',

@@ -9,9 +9,16 @@
   li {
     position:relative;
     overflow: hidden;
-    margin: 0 0 10px 0;
-    padding: 0 0 10px 0;
+    padding: 20px;
     border-bottom:1px solid rgba(0,0,0,.1);
+
+    &:hover {
+      background: #ededed;
+    }
+    &.active {
+      background:#eee;
+    }
+
     h4, p {
       margin-bottom:10px;
     }

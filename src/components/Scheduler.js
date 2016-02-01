@@ -77,6 +77,7 @@ export default class Scheduler extends Component {
     buttonClickHandler(e) {
 
         // validate here
+        // check for existing cron at this time
 
         const {onSchedule} = this.props
         const timeData = {
@@ -88,6 +89,7 @@ export default class Scheduler extends Component {
         const cronExpression =  cronPattern.replace('%minute%', this.state.minute).replace('%hour%', this.state.hour).replace('%dayOfWeek%', dayString)
         console.log(cronExpression)
         //const cronString = new Cron(timeData).expression;
+        console.log(this.state)
 
         // testing with RecurrenceRule
         onSchedule(this.state)
@@ -102,7 +104,7 @@ export default class Scheduler extends Component {
                 <Checkboxes options={timeUnits.DAYS} onClick={this.setDays}/>
                 <h3>At</h3>
                 <SelectList options={timeUnits.HOURS} onChange={this.setHour}/>
-                <span>:</span>
+                <span class="timeDivider">:</span>
                 <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes}/>
                 <Button onClick={this.buttonClickHandler}>Schedule</Button>
             </div>

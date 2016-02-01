@@ -1,3 +1,21 @@
 .Scheduler {
+  h3 {
+    margin-bottom:10px;
+  }
+  select {
+    width: 50px;
+    display:inline-block;
+    border:1px solid #eee;
+    padding:2px;
+    height:28px;
+    margin-right:10px;
+    background:#fff;
+    border:1px solid #ccc;
+    text-indent: 4px;
+  }
+
+  .timeDivider {
+    display:inline-block;
+  }
 
 }
