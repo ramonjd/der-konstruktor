@@ -8,7 +8,8 @@ export default class SelectList extends React.Component {
 
     static propTypes = {
         options:  PropTypes.array,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        defaultValue : PropTypes.string
     };
 
     constructor() {
@@ -16,10 +17,10 @@ export default class SelectList extends React.Component {
     }
 
     render() {
-        const {options, onChange} = this.props
+        const {options, onChange, defaultValue} = this.props
         return (
             <div className="SelectList">
-                <select onChange={onChange} defaultValue={options[0].value}>
+                <select onChange={onChange} defaultValue={defaultValue ? defaultValue :options[0].value}>
                     { options && options.length ? map(options, (item, i) => {
                         return (
                             <option key={i} ref={'item' + i} value={item.value}>

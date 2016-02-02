@@ -20,6 +20,7 @@ export default class Jobs extends Component {
         this.parseCron = this.parseCron.bind(this)
     }
 
+
     parseCron(cron) {
         // 45 13 * * 4-5
         let startTime = cron.hour + ':' + (cron.minute.length === 1 ? '0' + cron.minute : cron.minute)

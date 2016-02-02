@@ -25,7 +25,7 @@ header {
   justify-content: center;
   & > div {
     min-height: 50px;
-    padding:20px;
+    padding:0 20px 20px 20px;
     transition: width 0.7s ease-out;
     &:nth-child(1){
       order: 1;

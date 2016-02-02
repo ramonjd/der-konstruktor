@@ -67,21 +67,25 @@ export default class Player extends Component {
 
     }
 
+
+
     render() {
+
         const {selectedVideo} = this.props
-
-
 
         return (
             <div className='Player'>
-                {selectedVideo && selectedVideo.id ? <YouTube
-                    videoId={selectedVideo.id.videoId}
-                    opts={this.state.opts}
-                    onPlay={this.handlePlayVideo}
-                    onPause={this.handlePauseVideo}
-                    onEnd={this.handleStopVideo}
-                    onReady={this.handleReadyVideo}
-                /> : null}
+                {selectedVideo && selectedVideo.id ?
+                    <YouTube
+                            videoId={selectedVideo.id.videoId}
+                            opts={this.state.opts}
+                            onPlay={this.handlePlayVideo}
+                            onPause={this.handlePauseVideo}
+                            onEnd={this.handleStopVideo}
+                            onReady={this.handleReadyVideo}
+                        />
+
+                  : null}
             </div>
         )
     }

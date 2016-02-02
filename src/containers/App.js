@@ -22,7 +22,8 @@ function mapStateToProps(state) {
         videos : search.results,
         isFetchingVideos : search.isFetching,
         selectedVideo : player.video,
-        selectedJob : jobs.video
+        selectedJob : jobs.selectedJob,
+        isPlaying : player.isPlaying
     }
 }
 
@@ -39,6 +40,7 @@ export default class App extends Component {
         selectedVideo:  PropTypes.object,
         isFetchingJobs:  PropTypes.bool,
         isFetchingVideos:  PropTypes.bool,
+        isPlaying:  PropTypes.bool,
         selectedJob:  PropTypes.object,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
@@ -47,6 +49,7 @@ export default class App extends Component {
         super(props)
         this.onSelectVideoHandler = this.onSelectVideoHandler.bind(this)
         this.onSelectJobHandler = this.onSelectJobHandler.bind(this)
+        this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
         this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
     }
 
@@ -72,13 +75,23 @@ export default class App extends Component {
         actions.setVideo(videoData)
     }
 
-    onSelectJobHandler(videoData){
-        console.log('onSelectVideoHandler', videoData);
+    onSelectJobHandler(jobData){
+        console.log('onSelectJobHandler', jobData);
         const {actions} = this.props
-        actions.setJob(videoData)
+        actions.setJob(jobData)
     }
 
     onSelectScheduleHandler(schedule){
+        const {selectedJob, actions} = this.props
+        const newSchedule = {
+            cron : schedule
+        }
+        actions.updateJob(selectedJob.id, newSchedule)
+
+    }
+
+
+    onUpdateScheduleHandler(schedule){
         const {selectedVideo, actions} = this.props
         const newSchedule = {
             cron : schedule,
@@ -93,6 +106,7 @@ export default class App extends Component {
 
     render() {
         const {isFetchingVideos, isFetchingJobs, videos, jobs, selectedVideo, selectedJob, actions} = this.props
+        console.log('App selected job', selectedJob)
         return (
             <div className='App'>
                 <header>
@@ -104,8 +118,8 @@ export default class App extends Component {
                             <Jobs data={jobs} selectedJob={selectedJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
                         <div>
-                            <Player selectedVideo={selectedVideo} selectedJob={selectedJob} setIsPlaying={actions.setIsPlaying} />
-                            {selectedVideo && selectedVideo.id ? <Scheduler onSchedule={this.onSelectScheduleHandler}/> : null}
+                            <Player selectedVideo={selectedVideo} selectedJob={selectedJob} setIsPlaying={actions.setIsPlaying} selectScheduleHandler={this.onSelectScheduleHandler}/>
+                            <Scheduler onSchedule={this.onSelectScheduleHandler} onUpdate={this.onSelectScheduleHandler} selectedJob={selectedJob} selectedVideo={selectedVideo} />
                         </div>
                         <div>
                             <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>

@@ -45,7 +45,12 @@ let getInitialState = () => {
 let cronPattern = '%minute% %hour% * * %dayOfWeek%'
 
 export default class Scheduler extends Component {
-    static propTypes = {};
+
+    static propTypes = {
+        selectedJob:  PropTypes.object,
+        selectedVideo:  PropTypes.object,
+        onSchedule:  PropTypes.func
+    };
 
     constructor() {
         super()
@@ -53,9 +58,23 @@ export default class Scheduler extends Component {
         this.setDays = this.setDays.bind(this)
         this.setHour = this.setHour.bind(this)
         this.setMinutes = this.setMinutes.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
+        this.scheduleHandler = this.scheduleHandler.bind(this)
+        this.updateHandler = this.updateHandler.bind(this)
     }
+    componentWillReceiveProps(nextProps) {
+        const {selectedJob} = nextProps
 
+        if (selectedJob && selectedJob.cron) {
+            this.setState({
+                hour : selectedJob.cron.hour,
+                minute : selectedJob.cron.minute,
+                dayOfWeek : selectedJob.cron.dayOfWeek
+            })
+            console.log('Scheduler componentWillMount', this.state);
+
+        }
+
+    }
     setDays(e) {
         let dayOfWeek = this.state.dayOfWeek
         if (e.target.checked === true) {
@@ -74,13 +93,13 @@ export default class Scheduler extends Component {
         this.setState({minute: e.target.value});
     }
 
-    buttonClickHandler(e) {
-
+    scheduleHandler(e) {
+        e.preventDefault()
         // validate here
         // check for existing cron at this time
 
         const {onSchedule} = this.props
-        const timeData = {
+       /* const timeData = {
             dayOfWeek: this.state.dayOfWeek,
             startTime: this.state.hour + ':' + this.state.minute + ':00'
         }
@@ -91,22 +110,50 @@ export default class Scheduler extends Component {
         //const cronString = new Cron(timeData).expression;
         console.log(this.state)
 
-        // testing with RecurrenceRule
+        // testing with RecurrenceRule*/
         onSchedule(this.state)
+
+    }
+
+
+    updateHandler(e) {
         e.preventDefault()
+        const {onUpdate} = this.props
+        onUpdate(this.state)
+
+    }
+
+    setJobState(cron){
+        this.setState({
+            dayOfWeek: cron.dayOfWeek,
+            hour: cron.hour,
+            minute: cron.minute
+        });
     }
 
     render() {
+        const {selectedJob, selectedVideo} = this.props
+
+        let buttonClickHandler = this.scheduleHandler
+
+        if (selectedJob && selectedJob.cron) {
+            buttonClickHandler = this.updateHandler
+        }
+console.log('render scheduler', selectedJob)
         return (
             <div className="Scheduler">
-                <h2>Schedule this video</h2>
-                <h3>Every</h3>
-                <Checkboxes options={timeUnits.DAYS} onClick={this.setDays}/>
-                <h3>At</h3>
-                <SelectList options={timeUnits.HOURS} onChange={this.setHour}/>
-                <span class="timeDivider">:</span>
-                <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes}/>
-                <Button onClick={this.buttonClickHandler}>Schedule</Button>
+                {selectedJob && selectedJob.id ?
+                    <div>
+                        <h2>Schedule this video</h2>
+                        <h3>Every</h3>
+                        <Checkboxes options={timeUnits.DAYS} onClick={this.setDays} defaultValue={this.state.dayOfWeek ? this.state.dayOfWeek : null } />
+                        <h3>At</h3>
+                        <SelectList options={timeUnits.HOURS} onChange={this.setHour} defaultValue={this.state.hour ? this.state.hour : null }/>
+                        <span className="divider">:</span>
+                        <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes} defaultValue={this.state.minute ? this.state.minute : null }/>
+                        <Button onClick={buttonClickHandler}>Schedule</Button>
+                    </div>
+                  : null}
             </div>
         )
     }

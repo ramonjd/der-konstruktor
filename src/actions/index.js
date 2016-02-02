@@ -113,7 +113,10 @@ function selectJob(data) {
 }
 
 
+
+
 export function setJob(data) {
+    console.log('setJob action', data);
     return (dispatch, getState) => {
         dispatch(selectJob(data))
     }

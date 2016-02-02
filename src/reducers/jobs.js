@@ -19,6 +19,8 @@ export default function jobs(state = initialState, action = {}) {
                 results : action.data
             })
         case actionTypes.JOBS_SELECT_JOB:
+            console.log('JOBS_SELECT_JOB reducer', action)
+
             return Object.assign({}, state, {
                 selectedJob : action.data
             })
