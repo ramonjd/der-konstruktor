@@ -29,7 +29,13 @@ export default class Checkboxes extends React.Component {
                     let id = item.name + item.value
                     let checked = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
                     return (
-                        <label htmlFor={id} key={i}><input onChange={onClick} type='checkbox' id={id} value={item.value} defaultChecked={checked}/>{item.name}</label>
+                        <div className='checkboxesContainer' key={i}>
+                            <div className='switch'>
+                                <input onChange={onClick} type='checkbox' id={id} value={item.value} defaultChecked={checked}/>
+                                <span></span>
+                            </div>
+                            <label htmlFor={id}>{item.name}</label>
+                        </div>
                     )
                 }) : null }
             </div>

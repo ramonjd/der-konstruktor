@@ -52,9 +52,9 @@ export function registerJobs(socket){
                     forEach(obj, (job) => {
 
                         let rule = new schedule.RecurrenceRule()
-                        rule.dayOfWeek = map(job.cron.dayOfWeek, (item) => {return parseInt(item)})
-                        rule.hour = parseInt(job.cron.hour)
-                        rule.minute = parseInt(job.cron.minute)
+                        rule.dayOfWeek = map(job.schedule.dayOfWeek, (item) => {return parseInt(item)})
+                        rule.hour = parseInt(job.schedule.hour)
+                        rule.minute = parseInt(job.schedule.minute)
 
                         var j = schedule.scheduleJob(rule, scheduledJobCallback(job))
 

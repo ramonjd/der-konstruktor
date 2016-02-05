@@ -23,7 +23,7 @@ let getInitialState = () => {
 
 export default class Player extends Component {
     static propTypes = {
-        selectedVideo:  PropTypes.object
+        selectedVideoJob:  PropTypes.object
     };
 
     constructor(props) {
@@ -55,7 +55,6 @@ export default class Player extends Component {
 
     handleStopVideo(e) {
         console.log('VIDEO STOP')
-
         const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'stopped'
@@ -68,16 +67,13 @@ export default class Player extends Component {
     }
 
 
-
     render() {
-
-        const {selectedVideo} = this.props
-
+        const {selectedVideoJob} = this.props
         return (
             <div className='Player'>
-                {selectedVideo && selectedVideo.id ?
+                {selectedVideoJob && selectedVideoJob.video ?
                     <YouTube
-                            videoId={selectedVideo.id.videoId}
+                            videoId={selectedVideoJob.video.id.videoId}
                             opts={this.state.opts}
                             onPlay={this.handlePlayVideo}
                             onPause={this.handlePauseVideo}

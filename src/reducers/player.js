@@ -1,19 +1,19 @@
 import {actionTypes} from '../constants/'
 
 const initialState = {
-    isPlaying : false,
-    video : {}
+    isPlayingVideo : false,
+    selectedVideoJob : {}
 }
 
 export default function player(state = initialState, action = {}) {
     switch (action.type) {
         case actionTypes.PLAYER_IS_PLAYING:
             return Object.assign({}, state, {
-                isPlaying: action.isPlaying
+                isPlayingVideo: action.isPlayingVideo
             })
         case actionTypes.PLAYER_UPDATE_VIDEO:
             return Object.assign({}, state, {
-                video : action.data
+                selectedVideoJob : action.data
             })
         default:
             return state

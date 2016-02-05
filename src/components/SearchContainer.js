@@ -15,7 +15,8 @@ let getInitialState = () => {
 
 export default class SearchContainer extends Component {
     static propTypes = {
-        data:  PropTypes.object.isRequired
+        data:  PropTypes.object.isRequired,
+        onSelectVideo  :PropTypes.func
     };
 
     constructor(props) {

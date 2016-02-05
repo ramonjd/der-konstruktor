@@ -16,14 +16,36 @@ const socket = io.connect('http://localhost:9999')
 function mapStateToProps(state) {
     const { search, jobs, player } = state
 
+
+/*
+
+    jobs : jobs.results,
+    isFetchingJobs : jobs.isFetchingJobs,
+    searchResults : search.searchResults,
+    isFetchingSearchResults : search.isFetchingSearchResults,
+    selectedVideoJob  : player.selectedVideoJob,
+    isPlayingVideo  : player.isPlayingVideo
+
+
+     jobs : PropTypes.array,
+     isFetchingJobs : PropTypes.bool,
+     searchResults : PropTypes.array,
+     isFetchingSearchResults : PropTypes.bool,
+     selectedVideoJob : PropTypes.object,
+     isPlayingVideo : PropTypes.bool
+
+
+    */
+
+
+
     return {
-        jobs : jobs.results,
-        isFetchingJobs : jobs.isFetching,
-        videos : search.results,
-        isFetchingVideos : search.isFetching,
-        selectedVideo : player.video,
-        selectedJob : jobs.selectedJob,
-        isPlaying : player.isPlaying
+        jobs : jobs.jobs,
+        isFetchingJobs : jobs.isFetchingJobs,
+        searchResults : search.searchResults,
+        isFetchingSearchResults : search.isFetchingSearchResults,
+        selectedVideoJob  : player.selectedVideoJob,
+        isPlayingVideo  : player.isPlayingVideo
     }
 }
 
@@ -35,13 +57,12 @@ function mapDispatchToProps(dispatch) {
 export default class App extends Component {
 
     static propTypes = {
-        jobs:  PropTypes.array,
-        videos:  PropTypes.object.isRequired,
-        selectedVideo:  PropTypes.object,
-        isFetchingJobs:  PropTypes.bool,
-        isFetchingVideos:  PropTypes.bool,
-        isPlaying:  PropTypes.bool,
-        selectedJob:  PropTypes.object,
+        jobs : PropTypes.array,
+        isFetchingJobs : PropTypes.bool,
+        searchResults : PropTypes.object,
+        isFetchingSearchResults : PropTypes.bool,
+        selectedVideoJob : PropTypes.object,
+        isPlayingVideo : PropTypes.bool,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
 
@@ -49,64 +70,60 @@ export default class App extends Component {
         super(props)
         this.onSelectVideoHandler = this.onSelectVideoHandler.bind(this)
         this.onSelectJobHandler = this.onSelectJobHandler.bind(this)
-        this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
-        this.onSelectScheduleHandler = this.onSelectScheduleHandler.bind(this)
+        this.onUpdateScheduleHandler = this.onUpdateScheduleHandler.bind(this)
     }
 
     componentWillMount() {
         const {actions} = this.props
 
-        actions.getJobs()
-
-        socket.emit('schedule.created')
+        actions.getJobs(()=> {
+            socket.emit('schedule.created')
+        })
 
         socket.on('schedule.count',  (data) => {
             console.log(data);
         })
+
         socket.on('schedule.trigger',  (data) => {
-            console.log('schedule.trigger from socket', data);
-            actions.setVideo(data.job.video)
+            console.log('schedule.trigger from socket', data)
+            actions.setVideo(data.job)
         })
     }
 
     onSelectVideoHandler(videoData){
-        console.log('onSelectVideoHandler', videoData);
         const {actions} = this.props
-        actions.setVideo(videoData)
+        const jobData = {
+            video : videoData
+        }
+        actions.setVideo(jobData)
     }
 
     onSelectJobHandler(jobData){
-        console.log('onSelectJobHandler', jobData);
         const {actions} = this.props
-        actions.setJob(jobData)
+        actions.setVideo(jobData)
     }
 
-    onSelectScheduleHandler(schedule){
-        const {selectedJob, actions} = this.props
-        const newSchedule = {
-            cron : schedule
+    onUpdateScheduleHandler(schedule) {
+        const {selectedVideoJob, actions} = this.props
+
+        let updatedJob = selectedVideoJob
+
+        updatedJob.schedule = schedule
+
+        if (updatedJob.id) {
+            actions.updateJob(updatedJob.id, updatedJob, ()=> {
+                socket.emit('schedule.created')
+            })
+        } else {
+            actions.createJob(updatedJob, ()=> {
+                socket.emit('schedule.created')
+            })
         }
-        actions.updateJob(selectedJob.id, newSchedule)
-
-    }
-
-
-    onUpdateScheduleHandler(schedule){
-        const {selectedVideo, actions} = this.props
-        const newSchedule = {
-            cron : schedule,
-            video : selectedVideo
-        }
-        actions.createJob(newSchedule, ()=> {
-            socket.emit('schedule.created')
-        })
         actions.unsetVideo()
-
     }
 
     render() {
-        const {isFetchingVideos, isFetchingJobs, videos, jobs, selectedVideo, selectedJob, actions} = this.props
-        console.log('App selected job', selectedJob)
+        const {isFetchingSearchResults, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions} = this.props
         return (
             <div className='App'>
                 <header>
@@ -115,15 +132,15 @@ export default class App extends Component {
                 <main>
                     <section className="flex">
                         <div>
-                            <Jobs data={jobs} selectedJob={selectedJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
+                            <Jobs data={jobs} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
                         <div>
-                            <Player selectedVideo={selectedVideo} selectedJob={selectedJob} setIsPlaying={actions.setIsPlaying} selectScheduleHandler={this.onSelectScheduleHandler}/>
-                            <Scheduler onSchedule={this.onSelectScheduleHandler} onUpdate={this.onSelectScheduleHandler} selectedJob={selectedJob} selectedVideo={selectedVideo} />
+                            <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} selectScheduleHandler={this.onSelectScheduleHandler}/>
+                            <Scheduler onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob} />
                         </div>
                         <div>
-                            <Search handleSearch={actions.search} isFetching={isFetchingVideos}/>
-                            <SearchContainer data={videos} onSelectVideo={this.onSelectVideoHandler}/>
+                            <Search handleSearch={actions.search} isFetching={isFetchingSearchResults}/>
+                            <SearchContainer data={searchResults} onSelectVideo={this.onSelectVideoHandler}/>
                         </div>
                     </section>
                 </main>

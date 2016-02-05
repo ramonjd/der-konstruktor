@@ -52,7 +52,6 @@
     "axios": "^0.8.1",
     "body-parser": "^1.14.2",
     "compression": "^1.6.0",
-    "cron.js": "^1.0.2",
     "express": "^4.13.3",
     "jade": "^1.11.0",
     "jsonfile": "^2.2.3",

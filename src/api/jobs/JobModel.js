@@ -33,11 +33,11 @@ function getRandom(videoId){
 
 export default class JobModel {
     constructor(properties) {
-        let {cron, video } = properties
+        let {schedule, video } = properties
         this.job =  {
             created : new Date(),
             id : getRandom(video.id.videoId),
-            cron,
+            schedule,
             video
         }
     }

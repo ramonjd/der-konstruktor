@@ -10,10 +10,10 @@ function setPlayerVideo(data) {
     }
 }
 
-function setPlayerIsPlaying(isPlaying) {
+function setPlayerIsPlaying(isPlayingVideo) {
     return {
         type: actionTypes.PLAYER_IS_PLAYING,
-        isPlaying
+        isPlayingVideo
     }
 }
 
@@ -23,9 +23,9 @@ export function setVideo(data) {
     }
 }
 
-export function setIsPlaying(isPlaying) {
+export function setIsPlaying(isPlayingVideo) {
     return (dispatch, getState) => {
-        dispatch(setPlayerIsPlaying(isPlaying))
+        dispatch(setPlayerIsPlaying(isPlayingVideo))
     }
 }
 
@@ -35,7 +35,7 @@ export function unsetVideo() {
     }
 }
 
-// ========================================= YOUTUBE
+// ========================================= SEARCH
 function youtubeRequest() {
     return {
         type: actionTypes.SEARCH_RESULTS_REQUEST
@@ -55,13 +55,7 @@ function youtubeFailure() {
     }
 }
 
-function youtubeSelectVideo(state, id) {
-    return {
-        type: actionTypes.SEARCH_RESULTS_SELECT,
-        state,
-        id
-    }
-}
+
 
 export function search(query) {
     return (dispatch, getState) => {
@@ -75,15 +69,8 @@ export function search(query) {
     }
 }
 
-export function selectVideo(videoId) {
-    return (dispatch, getState) => {
-        dispatch(youtubeSelectVideo(getState(), videoId))
-    }
-}
 
-
-
-// ========================================= JOBS API
+// ========================================= JOBS
 
 
 function jobRequest() {
@@ -105,22 +92,6 @@ function jobFailure() {
     }
 }
 
-function selectJob(data) {
-    return {
-        type: actionTypes.JOBS_SELECT_JOB,
-        data
-    }
-}
-
-
-
-
-export function setJob(data) {
-    console.log('setJob action', data);
-    return (dispatch, getState) => {
-        dispatch(selectJob(data))
-    }
-}
 
 export function createJob(data, callback) {
     return (dispatch, getState) => {
@@ -137,11 +108,14 @@ export function createJob(data, callback) {
     }
 }
 
-export function updateJob(id, data) {
+export function updateJob(id, data, callback) {
     return (dispatch, getState) => {
         dispatch(jobRequest())
         return axios.put(api.JOBS_URL, {id : id, data : data}).then((response) => {
                 dispatch(jobSuccess(response.data))
+                if (callback) {
+                    callback()
+                }
             })
             .catch((response) => {
                 dispatch(jobFailure(response))
@@ -149,11 +123,14 @@ export function updateJob(id, data) {
     }
 }
 
-export function getJobs() {
+export function getJobs(callback) {
     return (dispatch, getState) => {
         dispatch(jobRequest())
         return axios.get(api.JOBS_URL).then((response) => {
                 dispatch(jobSuccess(response.data))
+                if (callback) {
+                    callback()
+                }
             })
             .catch((response) => {
                 dispatch(jobFailure(response))
