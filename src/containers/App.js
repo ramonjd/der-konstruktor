@@ -123,14 +123,17 @@ export default class App extends Component {
     }
 
     render() {
-        const {isFetchingSearchResults, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions} = this.props
+        const {isFetchingSearchResults, isPlayingVideo, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions} = this.props
+
+        const flexClassName = isPlayingVideo && isPlayingVideo === true ? 'flex isPlayingVideo' : 'flex';
+
         return (
             <div className='App'>
                 <header>
                     <h1>Schedule me Youtube</h1>
                 </header>
                 <main>
-                    <section className="flex">
+                    <section className={flexClassName}>
                         <div>
                             <Jobs data={jobs} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>

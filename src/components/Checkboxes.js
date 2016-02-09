@@ -19,8 +19,6 @@ export default class Checkboxes extends React.Component {
         super()
     }
 
-
-
     render() {
         const {options, onClick, defaultValue} = this.props
         return (
