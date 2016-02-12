@@ -14,7 +14,9 @@ let getInitialState = () => {
     return {
         dayOfWeek: [],
         hour: timeUnits.HOURS[0].value,
-        minute: timeUnits.MINUTES[0].value
+        minute: timeUnits.MINUTES[0].value,
+        showError : false,
+        errorText : ''
     }
 }
 
@@ -35,42 +37,66 @@ export default class Scheduler extends Component {
         this.setMinutes = this.setMinutes.bind(this)
         this.scheduleHandler = this.scheduleHandler.bind(this)
     }
+
     componentWillReceiveProps(nextProps) {
         const {selectedVideoJob} = nextProps
 
         if (selectedVideoJob && selectedVideoJob.schedule) {
+            console.log('Scheduler componentWillReceiveProps', selectedVideoJob);
+
             this.setState({
                 hour : selectedVideoJob.schedule.hour,
                 minute : selectedVideoJob.schedule.minute,
                 dayOfWeek : selectedVideoJob.schedule.dayOfWeek
             })
-            console.log('Scheduler componentWillMount', this.state);
-
+        } else {
+            this.state = getInitialState()
         }
+        console.log('Scheduler componentWillReceiveProps', this.state);
 
     }
-    setDays(e) {
+    setDays(val, e) {
         let dayOfWeek = this.state.dayOfWeek
         if (e.target.checked === true) {
-            dayOfWeek.push(e.target.value)
+            dayOfWeek.push(val)
         } else {
-            dayOfWeek = without(dayOfWeek, e.target.value)
+            dayOfWeek = without(dayOfWeek, val)
         }
-        this.setState({dayOfWeek: dayOfWeek.sort()});
+        this.setState({
+            dayOfWeek: dayOfWeek.sort()
+        });
+        console.log('dayOfWeek', this.state.dayOfWeek);
     }
 
-    setHour(e) {
-        this.setState({hour: e.target.value});
+    setHour(val) {
+        this.setState({hour:val});
     }
 
-    setMinutes(e) {
-        this.setState({minute: e.target.value});
+    setMinutes(val) {
+        this.setState({minute: val});
     }
 
     scheduleHandler(e) {
         e.preventDefault()
         const {onSchedule} = this.props
-        onSchedule(this.state)
+
+        if (this.state.dayOfWeek.length === 0) {
+            this.setState({
+                showError : true,
+                errorText : 'Hey, you need to select a day, fella!'
+            });
+        } else {
+            this.setState({
+                showError : false,
+                errorText : ''
+            });
+            onSchedule({
+                hour : this.state.hour,
+                dayOfWeek : this.state.dayOfWeek,
+                minute : this.state.minute
+            })
+        }
+
     }
 
     setJobState(cron){
@@ -80,21 +106,26 @@ export default class Scheduler extends Component {
             minute: cron.minute
         });
     }
-
     render() {
         const {selectedVideoJob} = this.props
-
+        const titleText = selectedVideoJob && selectedVideoJob.schedule ? 'Reschedule this video' : 'Schedule this video'
+        const errorClass = this.state.showError === true ? 'error active' : 'error'
         return (
-            <div className="Scheduler">
+            <div className='Scheduler'>
                 {selectedVideoJob && selectedVideoJob.video ?
                     <div>
-                        <h2>Schedule this video</h2>
-                        <h3>Every</h3>
-                        <Checkboxes options={timeUnits.DAYS} onClick={this.setDays} defaultValue={this.state.dayOfWeek ? this.state.dayOfWeek : null } />
-                        <h3>At</h3>
-                        <SelectList options={timeUnits.HOURS} onChange={this.setHour} defaultValue={this.state.hour ? this.state.hour : null }/>
-                        <span className="divider">:</span>
-                        <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes} defaultValue={this.state.minute ? this.state.minute : null }/>
+                        <h2>{titleText}</h2>
+                        <p className={errorClass}>{this.state.errorText}</p>
+                        <fieldset>
+                            <legend>Every</legend>
+                            <Checkboxes options={timeUnits.DAYS} onChange={this.setDays} defaultValue={this.state.dayOfWeek ? this.state.dayOfWeek : null } />
+                        </fieldset>
+                        <fieldset>
+                            <legend>At</legend>
+                            <SelectList options={timeUnits.HOURS} onChange={this.setHour} defaultValue={this.state.hour ? this.state.hour : null }/>
+                            <span className="divider">:</span>
+                            <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes} defaultValue={this.state.minute ? this.state.minute : null }/>
+                        </fieldset>
                         <Button onClick={this.scheduleHandler}>Schedule</Button>
                     </div>
                   : null}
@@ -102,3 +133,4 @@ export default class Scheduler extends Component {
         )
     }
 }
+

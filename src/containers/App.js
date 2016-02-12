@@ -16,29 +16,6 @@ const socket = io.connect('http://localhost:9999')
 function mapStateToProps(state) {
     const { search, jobs, player } = state
 
-
-/*
-
-    jobs : jobs.results,
-    isFetchingJobs : jobs.isFetchingJobs,
-    searchResults : search.searchResults,
-    isFetchingSearchResults : search.isFetchingSearchResults,
-    selectedVideoJob  : player.selectedVideoJob,
-    isPlayingVideo  : player.isPlayingVideo
-
-
-     jobs : PropTypes.array,
-     isFetchingJobs : PropTypes.bool,
-     searchResults : PropTypes.array,
-     isFetchingSearchResults : PropTypes.bool,
-     selectedVideoJob : PropTypes.object,
-     isPlayingVideo : PropTypes.bool
-
-
-    */
-
-
-
     return {
         jobs : jobs.jobs,
         isFetchingJobs : jobs.isFetchingJobs,
@@ -91,7 +68,9 @@ export default class App extends Component {
     }
 
     onSelectVideoHandler(videoData){
+
         const {actions} = this.props
+
         const jobData = {
             video : videoData
         }
@@ -110,6 +89,7 @@ export default class App extends Component {
 
         updatedJob.schedule = schedule
 
+        // if the job already has an id, it's coming from the db, so update it
         if (updatedJob.id) {
             actions.updateJob(updatedJob.id, updatedJob, ()=> {
                 socket.emit('schedule.created')
@@ -119,13 +99,14 @@ export default class App extends Component {
                 socket.emit('schedule.created')
             })
         }
-        actions.unsetVideo()
+        // alert(updated)
+        //actions.unsetVideo()
     }
 
     render() {
         const {isFetchingSearchResults, isPlayingVideo, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions} = this.props
 
-        const flexClassName = isPlayingVideo && isPlayingVideo === true ? 'flex isPlayingVideo' : 'flex';
+        const flexClassName = isPlayingVideo && isPlayingVideo === true ? 'isPlayingVideo' : '';
 
         return (
             <div className='App'>
@@ -133,11 +114,11 @@ export default class App extends Component {
                     <h1>Schedule me Youtube</h1>
                 </header>
                 <main>
-                    <section className={flexClassName}>
+                    <section className='flex'>
                         <div>
                             <Jobs data={jobs} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
-                        <div>
+                        <div className={flexClassName}>
                             <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} selectScheduleHandler={this.onSelectScheduleHandler}/>
                             <Scheduler onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob} />
                         </div>

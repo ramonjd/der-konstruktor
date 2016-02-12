@@ -4,6 +4,12 @@ if (process.env.BROWSER) {
 import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 
+let getInitialState = () => {
+    return {
+        defaultValue : null
+    }
+}
+
 export default class SelectList extends React.Component {
 
     static propTypes = {
@@ -14,13 +20,30 @@ export default class SelectList extends React.Component {
 
     constructor() {
         super()
+        this.state = getInitialState()
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {options, defaultValue} = nextProps
+        this.setState({
+            defaultValue : defaultValue
+        })
+    }
+
+    handleChange(e){
+        const {onChange} = this.props
+        this.setState({
+            defaultValue :e.target.value
+        })
+        onChange(e.target.value)
     }
 
     render() {
         const {options, onChange, defaultValue} = this.props
         return (
             <div className="SelectList">
-                <select onChange={onChange} defaultValue={defaultValue ? defaultValue :options[0].value}>
+                <select onChange={this.handleChange.bind(this)} value={this.state.defaultValue}>
                     { options && options.length ? map(options, (item, i) => {
                         return (
                             <option key={i} ref={'item' + i} value={item.value}>

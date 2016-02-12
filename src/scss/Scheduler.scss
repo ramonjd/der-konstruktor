@@ -1,7 +1,14 @@
 .Scheduler {
 
-  h3 {
+  legend {
+    font-weight:bold;
     margin-bottom:10px;
+  }
+  fieldset {
+    background: #fff;
+    margin-bottom:20px;
+    padding:10px;
+    border:1px dotted #000;
   }
   select {
     width: 50px;
@@ -18,6 +25,17 @@
   .divider {
     display:inline-block;
     margin-right:10px;
+  }
+  .error {
+    margin:0 0 15px 0;
+    font-weight: 700;
+    padding:8px;
+    background: #fff;
+    display:none;
+    color:#cc0000;
+    &.active {
+      display:inline-block;
+    }
   }
 
 }

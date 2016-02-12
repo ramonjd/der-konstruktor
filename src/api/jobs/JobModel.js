@@ -73,7 +73,13 @@ export default class JobModel {
                         merge(o, data)
                     }
                 })
-                callback(null, sortBy(obj, (o) => { return o.created }))
+                jsonfile.writeFile(filePath, obj,  (err) => {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, sortBy(obj, (o) => { return o.created }))
+                    }
+                })
             }
         })
     }

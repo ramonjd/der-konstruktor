@@ -6,7 +6,11 @@ import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 
 
+let getInitialState = () => {
+    return {
 
+    }
+}
 
 export default class Checkboxes extends React.Component {
 
@@ -17,19 +21,40 @@ export default class Checkboxes extends React.Component {
 
     constructor() {
         super()
+        this.state = getInitialState()
+        this.handleChange = this.handleChange.bind(this)
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {options, defaultValue} = nextProps
+        if (options && options.length) {
+            map(options, (item, i) => {
+                let nextState = {}
+                nextState[item.value] = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
+                this.setState(nextState)
+            })
+        }
+    }
+
+    handleChange(val, e){
+        const {onChange} = this.props
+        let nextState = {}
+        nextState[val] = e.target.checked
+        this.setState(nextState)
+        onChange(val, e)
+    }
+
+
     render() {
-        const {options, onClick, defaultValue} = this.props
+        const {options, defaultValue} = this.props
         return (
             <div className="Checkboxes">
                 { options && options.length ? map(options, (item, i) => {
                     let id = item.name + item.value
-                    let checked = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
                     return (
                         <div className='checkboxesContainer' key={i}>
                             <div className='switch'>
-                                <input onChange={onClick} type='checkbox' id={id} value={item.value} defaultChecked={checked}/>
+                                <input onChange={this.handleChange.bind(this, item.value)} type='checkbox' id={id} checked={this.state[item.value]}/>
                                 <span></span>
                             </div>
                             <label htmlFor={id}>{item.name}</label>

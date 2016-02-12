@@ -30,10 +30,14 @@ header {
   flex-direction: row;
   justify-content: center;
   & > div {
-    min-height: 50px;
     padding:20px;
     transition: width 0.7s ease-out;
     min-height:100%;
+
+    &.isPlayingVideo {
+
+    }
+
     &:nth-child(1){
       order: 1;
       flex: 1 1 30%;
@@ -57,26 +61,14 @@ header {
     }
   }
 
-  &.isPlayingVideo {
-    & > div {
 
-      &:nth-child(1){
-        flex: 1 1 5%;
-      }
-      &:nth-child(2){
-        flex: 1 1 90%;
-      }
-      &:nth-child(3){
-        flex: 1 1 5%;
-      }
-   }
-  }
 }
 
 @media all and (max-width: 640px) {
   .flex {
     flex-direction: column;;
     & > div {
+      min-height: 50px;
 
       &:nth-child(1){
         order: 2;
