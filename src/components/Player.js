@@ -21,9 +21,28 @@ let getInitialState = () => {
     }
 }
 
+
+let getLargePlayBackState = () => {
+    return {
+        playbackState: 'playing',
+        opts : {
+            width: 640,
+            height: 360,
+            playerVars: {
+                autoplay : 1,
+                start : 0,
+                end : 25
+            }
+        }
+    }
+}
+
 export default class Player extends Component {
     static propTypes = {
-        selectedVideoJob:  PropTypes.object
+        selectedVideoJob:  PropTypes.object,
+        unsetVideo : PropTypes.func,
+        setIsPlaying : PropTypes.func,
+        isScheduled : PropTypes.bool
     };
 
     constructor(props) {
@@ -33,6 +52,14 @@ export default class Player extends Component {
         this.handleStopVideo = this.handleStopVideo.bind(this)
         this.handlePauseVideo = this.handlePauseVideo.bind(this)
         this.handlePlayVideo = this.handlePlayVideo.bind(this)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {isScheduled} = nextProps
+        console.log('Player componentWillReceiveProps isScheduled', isScheduled)
+        if (isScheduled === true) {
+            this.setState(getLargePlayBackState())
+        }
     }
 
     handlePlayVideo(e) {
@@ -55,11 +82,15 @@ export default class Player extends Component {
 
     handleStopVideo(e) {
         console.log('VIDEO STOP')
-        const {setIsPlaying} = this.props
+        const {setIsPlaying, isScheduled, unsetVideo} = this.props
         this.setState({
             playbackState: 'stopped'
         })
         setIsPlaying(false)
+        if (isScheduled === true) {
+            unsetVideo()
+            this.setState(getInitialState())
+        }
     }
 
     handleReadyVideo(e) {

@@ -47,7 +47,9 @@ export default class JobModel {
             if (err) {
                 callback(err)
             } else {
-                callback(null, sortBy(obj, (o) => { return o.created }))
+                callback(null, {
+                    jobs : sortBy(obj, (o) => { return o.created })
+                })
             }
         })
     }
@@ -77,7 +79,10 @@ export default class JobModel {
                     if (err) {
                         callback(err)
                     } else {
-                        callback(null, sortBy(obj, (o) => { return o.created }))
+                        callback(null, {
+                            jobs : sortBy(obj, (o) => { return o.created }),
+                            lastUpdatedId : id
+                        })
                     }
                 })
             }
@@ -101,7 +106,10 @@ export default class JobModel {
                     }else {
                         console.log('findByIdAndRemove jsonfile.writeFile', obj);
 
-                        callback(null, sortBy(obj, (o) => { return o.created }))
+                        callback(null, {
+                            jobs : sortBy(obj, (o) => { return o.created }),
+                            lastUpdatedId : id
+                        })
                     }
                 })
             }
@@ -118,7 +126,10 @@ export default class JobModel {
                     if (err) {
                         callback(err)
                     } else {
-                        callback(null, sortBy(obj, (o) => { return o.created }))
+                        callback(null, {
+                            jobs : sortBy(obj, (o) => { return o.created }),
+                            lastUpdatedId : this.job.id
+                        })
                     }
                 })
             }

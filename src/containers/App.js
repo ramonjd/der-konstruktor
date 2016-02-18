@@ -10,6 +10,8 @@ import SearchContainer from '../components/SearchContainer'
 import Jobs from '../components/Jobs'
 import Player from '../components/Player'
 import Scheduler from '../components/Scheduler'
+import classNames from 'classnames'
+import find from 'lodash/find'
 
 const socket = io.connect('http://localhost:9999')
 
@@ -19,10 +21,12 @@ function mapStateToProps(state) {
     return {
         jobs : jobs.jobs,
         isFetchingJobs : jobs.isFetchingJobs,
+        lastUpdatedId : jobs.lastUpdatedId,
         searchResults : search.searchResults,
         isFetchingSearchResults : search.isFetchingSearchResults,
         selectedVideoJob  : player.selectedVideoJob,
-        isPlayingVideo  : player.isPlayingVideo
+        isPlayingVideo  : player.isPlayingVideo,
+        isScheduled : player.isScheduled
     }
 }
 
@@ -35,11 +39,13 @@ export default class App extends Component {
 
     static propTypes = {
         jobs : PropTypes.array,
+        lastUpdatedId : PropTypes.string,
         isFetchingJobs : PropTypes.bool,
         searchResults : PropTypes.object,
         isFetchingSearchResults : PropTypes.bool,
         selectedVideoJob : PropTypes.object,
         isPlayingVideo : PropTypes.bool,
+        isScheduled : PropTypes.bool,
         actions : PropTypes.objectOf(React.PropTypes.func).isRequired
     };
 
@@ -62,15 +68,12 @@ export default class App extends Component {
         })
 
         socket.on('schedule.trigger',  (data) => {
-            console.log('schedule.trigger from socket', data)
-            actions.setVideo(data.job)
+            actions.setVideo(data.job, true)
         })
     }
 
     onSelectVideoHandler(videoData){
-
         const {actions} = this.props
-
         const jobData = {
             video : videoData
         }
@@ -83,44 +86,53 @@ export default class App extends Component {
     }
 
     onUpdateScheduleHandler(schedule) {
-        const {selectedVideoJob, actions} = this.props
+        const {selectedVideoJob, actions, jobs} = this.props
+
+
+        // check if schedule exists
+        // lodash
+        // if so, alert and don't save
+        // const match = find(jobs, { 'age': 1, 'active': true });
+
 
         let updatedJob = selectedVideoJob
-
         updatedJob.schedule = schedule
-
-        // if the job already has an id, it's coming from the db, so update it
         if (updatedJob.id) {
-            actions.updateJob(updatedJob.id, updatedJob, ()=> {
+            actions.updateJob(updatedJob.id, updatedJob, (id)=> {
                 socket.emit('schedule.created')
             })
         } else {
-            actions.createJob(updatedJob, ()=> {
+            actions.createJob(updatedJob, (id)=> {
                 socket.emit('schedule.created')
             })
         }
-        // alert(updated)
-        //actions.unsetVideo()
+
+        // stop playing video here
+
     }
 
     render() {
-        const {isFetchingSearchResults, isPlayingVideo, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions} = this.props
-
-        const flexClassName = isPlayingVideo && isPlayingVideo === true ? 'isPlayingVideo' : '';
+        const {isFetchingSearchResults, isPlayingVideo, isFetchingJobs, searchResults, jobs, selectedVideoJob, actions, lastUpdatedId, isScheduled} = this.props
+        const mainTitle = isScheduled ? 'Stand up!' : 'Schedule me Youtube'
+        const appClassName = classNames({
+            'isPlayingVideo': isPlayingVideo === true,
+            'isPlayingScheduled': isScheduled === true,
+            'App' : true
+        })
 
         return (
-            <div className='App'>
+            <div className={appClassName}>
                 <header>
-                    <h1>Schedule me Youtube</h1>
+                    <h1>{mainTitle}</h1>
                 </header>
                 <main>
                     <section className='flex'>
                         <div>
-                            <Jobs data={jobs} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
+                            <Jobs data={jobs} lastUpdatedId={lastUpdatedId} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
                         </div>
-                        <div className={flexClassName}>
-                            <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} selectScheduleHandler={this.onSelectScheduleHandler}/>
-                            <Scheduler onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob} />
+                        <div>
+                            <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} unsetVideo={actions.unsetVideo} isScheduled={isScheduled} />
+                            <Scheduler onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob}  isScheduled={isScheduled} />
                         </div>
                         <div>
                             <Search handleSearch={actions.search} isFetching={isFetchingSearchResults}/>

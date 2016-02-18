@@ -7,6 +7,7 @@ import React, { Component, PropTypes } from 'react'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
 import Button from './Button'
+import classNames from 'classnames'
 import {timeUnits} from '../constants/'
 
 export default class Jobs extends Component {
@@ -15,12 +16,14 @@ export default class Jobs extends Component {
         data: PropTypes.array,
         selectedVideoJob : PropTypes.object,
         onSelectJob : PropTypes.func,
-        onDeleteSchedule : PropTypes.func
+        onDeleteSchedule : PropTypes.func,
+        lastUpdatedId : PropTypes.string
     };
 
     constructor(props) {
         super(props)
         this.parseSchedule = this.parseSchedule.bind(this)
+        this.generateListItemClassName = this.generateListItemClassName.bind(this)
     }
 
 
@@ -39,15 +42,23 @@ export default class Jobs extends Component {
         </div>)
     }
 
+    generateListItemClassName(id) {
+        const {selectedVideoJob, lastUpdatedId, isFetching} = this.props
+        return classNames({
+            'active': selectedVideoJob && selectedVideoJob.id === id,
+            'flash': lastUpdatedId && lastUpdatedId === id && isFetching !== true
+        })
+    }
+
     render() {
-        const {data, onDeleteSchedule, onSelectJob, selectedVideoJob} = this.props
+        const {data, onDeleteSchedule, onSelectJob} = this.props
         return (
             <div className='Jobs'>
                 <h2>Scheduled Jobs</h2>
                 <ul>
                     { data && data.length ? map(data, (item, i) => {
                         return (
-                            <li key={ i } id={item.id} className={selectedVideoJob && selectedVideoJob.id === item.id ? 'active' : ''}>
+                            <li key={ i } id={item.id} className={this.generateListItemClassName(item.id)}>
                                 <img title={item.video.snippet.title} src={item.video.snippet.thumbnails.default.url} alt={item.video.snippet.title} onClick={onSelectJob.bind(this, item)}/>
                                 <div>
                                     <h4>{item.video.snippet.title}</h4>

@@ -24,8 +24,29 @@ header {
   background-color:#f8f8f8;
 }
 
-.flex {
+.App {
 
+  &.isPlayingVideo {
+
+  }
+
+  &.isPlayingScheduled {
+    .flex > div {
+      &:nth-child(1),
+      &:nth-child(3)
+      {
+        display:none;
+      }
+
+      &:nth-child(2){
+        flex: 1 1 100%;
+      }
+    }
+  }
+
+}
+
+.flex {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -33,10 +54,6 @@ header {
     padding:20px;
     transition: width 0.7s ease-out;
     min-height:100%;
-
-    &.isPlayingVideo {
-
-    }
 
     &:nth-child(1){
       order: 1;
@@ -60,8 +77,6 @@ header {
       background-color:#f8f8f8;
     }
   }
-
-
 }
 
 @media all and (max-width: 640px) {
@@ -84,4 +99,29 @@ header {
       }
     }
   }
+}
+
+// animations
+
+.flash {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: flash;
+  animation-name: flash;
+}
+
+@keyframes flash {
+  from, 50%, to {
+    opacity: 1;
+  }
+
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+.flash {
+  animation-name: flash;
 }

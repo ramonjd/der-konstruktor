@@ -2,7 +2,8 @@ import {actionTypes} from '../constants/'
 
 const initialState = {
     isPlayingVideo : false,
-    selectedVideoJob : {}
+    selectedVideoJob : {},
+    isScheduled : false
 }
 
 export default function player(state = initialState, action = {}) {
@@ -13,7 +14,8 @@ export default function player(state = initialState, action = {}) {
             })
         case actionTypes.PLAYER_UPDATE_VIDEO:
             return Object.assign({}, state, {
-                selectedVideoJob : action.data
+                selectedVideoJob : action.data,
+                isScheduled : action.isScheduled
             })
         default:
             return state

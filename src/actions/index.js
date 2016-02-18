@@ -3,10 +3,11 @@ import axios from 'axios'
 
 
 // ========================================= PLAYER
-function setPlayerVideo(data) {
+function setPlayerVideo(data, isScheduled) {
     return {
         type: actionTypes.PLAYER_UPDATE_VIDEO,
-        data
+        data,
+        isScheduled
     }
 }
 
@@ -17,9 +18,9 @@ function setPlayerIsPlaying(isPlayingVideo) {
     }
 }
 
-export function setVideo(data) {
+export function setVideo(data, isScheduled = false) {
     return (dispatch, getState) => {
-        dispatch(setPlayerVideo(data))
+        dispatch(setPlayerVideo(data, isScheduled))
     }
 }
 
@@ -31,7 +32,7 @@ export function setIsPlaying(isPlayingVideo) {
 
 export function unsetVideo() {
     return (dispatch, getState) => {
-        dispatch(setPlayerVideo({}))
+        dispatch(setPlayerVideo({}, false))
     }
 }
 

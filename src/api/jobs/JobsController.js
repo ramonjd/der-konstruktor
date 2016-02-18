@@ -3,9 +3,9 @@ import JobModel from './JobModel'
 const JobsController  = {
 
     all(req, res, next) {
-        JobModel.get((err, jobs) => {
+        JobModel.get((err, data) => {
             if (!err) {
-                res.status(200).json(jobs)
+                res.status(200).json(data)
             } else {
                 res.status(500).json(err)
             }
@@ -13,9 +13,9 @@ const JobsController  = {
     },
 
     getJobById(req, res, next) {
-        JobModel.findById(req.params.id,  (err, job)=> {
+        JobModel.findById(req.params.id,  (err, data)=> {
             if (!err) {
-                res.json(job);
+                res.json(data)
             } else {
                 res.status(500).json(err)
             }
@@ -24,20 +24,20 @@ const JobsController  = {
 
     updateJobById(req, res, next) {
         JobModel.
-        findByIdAndUpdate(req.body.id, req.body.data, (err, job) => {
+        findByIdAndUpdate(req.body.id, req.body.data, (err, data) => {
             if (!err) {
-                res.status(200).json(job)
+                res.status(200).json(data)
             } else {
-                res.json(422, err);
+                res.json(422, err)
             }
         });
     },
     deleteJobById(req, res, next) {
         console.log('deleteJobById', req.params.id);
         JobModel.
-        findByIdAndRemove(req.params.id, (err, jobs) => {
+        findByIdAndRemove(req.params.id, (err, data) => {
             if (!err) {
-                res.status(200).json(jobs)
+                res.status(200).json(data)
             } else {
                 res.status(422).json(err)
             }
@@ -45,11 +45,11 @@ const JobsController  = {
     },
     createJob(req, res, next) {
         let Job = new JobModel(req.body)
-        Job.save((err, jobs) => {
+        Job.save((err, data) => {
             if (!err) {
-                res.status(201).json(jobs)
+                res.status(201).json(data)
             } else {
-                return next(err);
+                return next(err)
             }
         });
 

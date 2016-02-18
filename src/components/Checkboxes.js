@@ -29,19 +29,23 @@ export default class Checkboxes extends React.Component {
         const {options, defaultValue} = nextProps
         if (options && options.length) {
             map(options, (item, i) => {
+                let id = item.name + item.value
                 let nextState = {}
-                nextState[item.value] = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
+                nextState[id] = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
                 this.setState(nextState)
             })
+
         }
+
     }
 
-    handleChange(val, e){
+    handleChange(item, e){
         const {onChange} = this.props
+        let id = item.name + item.value
         let nextState = {}
-        nextState[val] = e.target.checked
+        nextState[id] = e.target.checked
         this.setState(nextState)
-        onChange(val, e)
+        onChange(item.value, e)
     }
 
 
@@ -54,7 +58,7 @@ export default class Checkboxes extends React.Component {
                     return (
                         <div className='checkboxesContainer' key={i}>
                             <div className='switch'>
-                                <input onChange={this.handleChange.bind(this, item.value)} type='checkbox' id={id} checked={this.state[item.value]}/>
+                                <input onChange={this.handleChange.bind(this, item)} type='checkbox' id={id} checked={this.state[id]}/>
                                 <span></span>
                             </div>
                             <label htmlFor={id}>{item.name}</label>

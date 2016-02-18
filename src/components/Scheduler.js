@@ -20,12 +20,11 @@ let getInitialState = () => {
     }
 }
 
-let cronPattern = '%minute% %hour% * * %dayOfWeek%'
-
 export default class Scheduler extends Component {
 
     static propTypes = {
         selectedVideoJob:  PropTypes.object,
+        isScheduled:  PropTypes.bool,
         onSchedule:  PropTypes.func
     };
 
@@ -40,10 +39,7 @@ export default class Scheduler extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {selectedVideoJob} = nextProps
-
         if (selectedVideoJob && selectedVideoJob.schedule) {
-            console.log('Scheduler componentWillReceiveProps', selectedVideoJob);
-
             this.setState({
                 hour : selectedVideoJob.schedule.hour,
                 minute : selectedVideoJob.schedule.minute,
@@ -52,20 +48,18 @@ export default class Scheduler extends Component {
         } else {
             this.state = getInitialState()
         }
-        console.log('Scheduler componentWillReceiveProps', this.state);
-
     }
+
     setDays(val, e) {
         let dayOfWeek = this.state.dayOfWeek
         if (e.target.checked === true) {
-            dayOfWeek.push(val)
+            dayOfWeek.push(parseInt(val))
         } else {
             dayOfWeek = without(dayOfWeek, val)
         }
         this.setState({
             dayOfWeek: dayOfWeek.sort()
         });
-        console.log('dayOfWeek', this.state.dayOfWeek);
     }
 
     setHour(val) {
@@ -79,6 +73,8 @@ export default class Scheduler extends Component {
     scheduleHandler(e) {
         e.preventDefault()
         const {onSchedule} = this.props
+
+
 
         if (this.state.dayOfWeek.length === 0) {
             this.setState({
@@ -96,7 +92,6 @@ export default class Scheduler extends Component {
                 minute : this.state.minute
             })
         }
-
     }
 
     setJobState(cron){
@@ -104,15 +99,15 @@ export default class Scheduler extends Component {
             dayOfWeek: cron.dayOfWeek,
             hour: cron.hour,
             minute: cron.minute
-        });
+        })
     }
     render() {
-        const {selectedVideoJob} = this.props
+        const {selectedVideoJob, isScheduled} = this.props
         const titleText = selectedVideoJob && selectedVideoJob.schedule ? 'Reschedule this video' : 'Schedule this video'
         const errorClass = this.state.showError === true ? 'error active' : 'error'
         return (
             <div className='Scheduler'>
-                {selectedVideoJob && selectedVideoJob.video ?
+                {isScheduled !== true && selectedVideoJob && selectedVideoJob.video ?
                     <div>
                         <h2>{titleText}</h2>
                         <p className={errorClass}>{this.state.errorText}</p>
