@@ -26,7 +26,7 @@ class YouTube extends React.Component {
         onPlay: React.PropTypes.func,
         onPause: React.PropTypes.func,
         onEnd: React.PropTypes.func,
-        onStateChange: React.PropTypes.func,
+        onStateChange: React.PropTypes.func
     };
 
     static defaultProps = {
@@ -140,6 +140,10 @@ class YouTube extends React.Component {
 
     resetPlayer() {
         this.destroyPlayer().then(::this.createPlayer);
+    }
+
+    stopPlayer() {
+        return this._internalPlayer.stopVideo();
     }
 
     updateVideo() {

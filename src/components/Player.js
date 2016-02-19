@@ -97,6 +97,10 @@ export default class Player extends Component {
 
     }
 
+    stopVideo(){
+        // this.refs.videoPlayer.stopPlayer()
+    }
+
 
     render() {
         const {selectedVideoJob} = this.props
@@ -104,6 +108,7 @@ export default class Player extends Component {
             <div className='Player'>
                 {selectedVideoJob && selectedVideoJob.video ?
                     <YouTube
+                            ref="videoPlayer"
                             videoId={selectedVideoJob.video.id.videoId}
                             opts={this.state.opts}
                             onPlay={this.handlePlayVideo}
