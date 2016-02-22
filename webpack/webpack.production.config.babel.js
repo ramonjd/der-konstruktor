@@ -35,15 +35,14 @@ const config = {
                 NODE_ENV: JSON.stringify('production'),
                 BROWSER: JSON.stringify(true)
             }
-        }),
-        new HtmlWebpackPlugin({
+        })
+/*        new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'src/index.html',
             inject: 'body'
-        })
+        })*/
 
     ]
-
 }
 
 export default config

@@ -1,10 +1,10 @@
-import * as action_types from './actionTypes'
-import * as you_tube from './youtube'
-import * as time_units from './timeUnits'
-import * as api_urls from './api'
+import * as actions from './actionTypes'
+import * as youTube from './youtube'
+import * as time from './timeUnits'
+import * as apiUrls from './api'
 
 
-export const actionTypes = action_types
-export const youtube = you_tube
-export const timeUnits = time_units
-export const api = api_urls
+export const actionTypes = actions
+export const youtube = youTube
+export const timeUnits = time
+export const api = apiUrls

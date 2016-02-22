@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-//import config from '../config/'
+import config from '../config/'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
@@ -11,8 +11,8 @@ import {registerJobs} from './lib/ScheduleManager'
 
 // Initialize express server
 export default function(callback) {
-    const app = express()
 
+    const app = express()
 
     app.set('env', process.env.NODE_ENV || 'development')
     app.set('host', process.env.HOST || 'localhost')
@@ -23,13 +23,17 @@ export default function(callback) {
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
     app.use(compression())
+    app.use(express.static('/build'))
+
+/*    if (app.get('env') === 'production') {
+        app.use(express.static(path.join(__dirname, '../build')))
+    }*/
 
     api(app)
 
-
     app.get('/*', (req, res) => {
         res.status(200)
-            .render('index',  {})
+            .render('index',  {jsScript : config.jsScript})
     })
 
     // Generic server errors (e.g. not caught by components)
@@ -43,14 +47,6 @@ export default function(callback) {
 
 
 
-//const httpServer = http.Server(app)
-
-
-
-
-   // app.listen(app.get('port'), () => callback(app))
-
-
     const httpServer = http.createServer(app).listen(app.get('port'), ()=>{
         console.log('Express server listening on port ' + app.get('port'));
         callback(app)
@@ -60,25 +56,22 @@ export default function(callback) {
 
 
 
+    io.sockets.on('connection', (socket) => {
+        console.log('socket.io server connection');
+        socket.on('schedule.created',  () => {
+            // create schedules
+            registerJobs(socket)
+                .then(data => {
+                    socket.emit('schedule.count', { count: data.length})
+                })
+                .catch(error => {
+                    socket.emit('schedule.count', { error: true})
+                })
 
-io.sockets.on('connection', (socket) => {
-    console.log('socket.io server connection');
-    socket.on('schedule.created',  () => {
-        // create schedules
-        registerJobs(socket)
-            .then(data => {
-                socket.emit('schedule.count', { count: data.length})
-            })
-            .catch(error => {
-                socket.emit('schedule.count', { error: true})
-            })
 
-
+        })
     })
-})
 
-
-    // Finally, start the express server
     return app
 
 }

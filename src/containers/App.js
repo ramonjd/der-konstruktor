@@ -107,7 +107,8 @@ export default class App extends Component {
             })
         }
 
-        // stop playing video here
+        // should stop video instead of clearing
+        actions.unsetVideo()
 
     }
 

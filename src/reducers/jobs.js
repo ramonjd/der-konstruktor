@@ -1,10 +1,9 @@
 import {actionTypes} from '../constants/'
 
-
 const initialState = {
     isFetchingJobs: false,
-    jobs : [],
-    lastUpdatedId : ''
+    jobs: [],
+    lastUpdatedId: ''
 }
 
 export default function jobs(state = initialState, action = {}) {
@@ -18,7 +17,7 @@ export default function jobs(state = initialState, action = {}) {
                 isFetchingJobs: false,
                 jobs : action.data.jobs,
                 lastUpdatedId : action.data.lastUpdatedId
-    })
+            })
         default:
             return state
     }

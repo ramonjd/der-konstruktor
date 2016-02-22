@@ -19,19 +19,19 @@ function setPlayerIsPlaying(isPlayingVideo) {
 }
 
 export function setVideo(data, isScheduled = false) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(setPlayerVideo(data, isScheduled))
     }
 }
 
 export function setIsPlaying(isPlayingVideo) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(setPlayerIsPlaying(isPlayingVideo))
     }
 }
 
 export function unsetVideo() {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(setPlayerVideo({}, false))
     }
 }
@@ -57,16 +57,14 @@ function youtubeFailure() {
 }
 
 
-
 export function search(query) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(youtubeRequest())
         return axios.get(youtube.API_URL + query).then((response) => {
-                dispatch(youtubeSuccess(response.data))
-            })
-            .catch((response) => {
-                dispatch(youtubeFailure(response))
-            })
+            dispatch(youtubeSuccess(response.data))
+        }).catch((response) => {
+            dispatch(youtubeFailure(response))
+        })
     }
 }
 
@@ -95,67 +93,59 @@ function jobFailure() {
 
 
 export function createJob(data, callback) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(jobRequest())
         return axios.post(api.JOBS_URL, data).then((response) => {
-                dispatch(jobSuccess(response.data))
-                if (callback) {
-                    callback()
-                }
-            })
-            .catch((response) => {
-                dispatch(jobFailure(response))
-            })
+            dispatch(jobSuccess(response.data))
+            if (callback) {
+                callback()
+            }
+        }).catch((response) => {
+            dispatch(jobFailure(response))
+        })
     }
 }
 
 export function updateJob(id, data, callback) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(jobRequest())
-        return axios.put(api.JOBS_URL, {id : id, data : data}).then((response) => {
-                dispatch(jobSuccess(response.data))
-                if (callback) {
-                    callback()
-                }
-            })
-            .catch((response) => {
-                dispatch(jobFailure(response))
-            })
+        return axios.put(api.JOBS_URL, {id: id, data: data}).then((response) => {
+            dispatch(jobSuccess(response.data))
+            if (callback) {
+                callback()
+            }
+        }) .catch((response) => {
+            dispatch(jobFailure(response))
+        })
     }
 }
 
 export function getJobs(callback) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(jobRequest())
         return axios.get(api.JOBS_URL).then((response) => {
-                dispatch(jobSuccess(response.data))
-                if (callback) {
-                    callback()
-                }
-            })
-            .catch((response) => {
-                dispatch(jobFailure(response))
-            })
+            dispatch(jobSuccess(response.data))
+            if (callback) {
+                callback()
+            }
+        }).catch((response) => {
+            dispatch(jobFailure(response))
+        })
     }
 }
 
 export function deleteJobByVideoId(id) {
-    console.log('deleteJobByVideoId', id);
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(jobRequest())
         return axios.delete(api.JOBS_URL + '/' + id, {
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
-                console.log('deleteJobByVideoId jobSuccess', response);
-                dispatch(jobSuccess(response.data))
-            })
-            .catch((response) => {
-                console.log('deleteJobByVideoId jobFailure', response);
-
-                dispatch(jobFailure(response))
-            })
+            dispatch(jobSuccess(response.data))
+        }).catch((response) => {
+            dispatch(jobFailure(response))
+        })
     }
 }
 
@@ -183,25 +173,23 @@ function scheduleFailure() {
 }
 
 export function createSchedule(data) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(scheduleRequest())
         return axios.post(api.SCHEDULES_URL, data).then((response) => {
-                dispatch(scheduleSuccess(response.data))
-            })
-            .catch((response) => {
-                dispatch(scheduleFailure(response))
-            })
+            dispatch(scheduleSuccess(response.data))
+        }).catch((response) => {
+            dispatch(scheduleFailure(response))
+        })
     }
 }
 
 export function clearSchedule() {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(scheduleRequest())
         return axios.post(api.SCHEDULES_URL, data).then((response) => {
-                dispatch(scheduleSuccess(response.data))
-            })
-            .catch((response) => {
-                dispatch(scheduleFailure(response))
-            })
+            dispatch(scheduleSuccess(response.data))
+        }).catch((response) => {
+            dispatch(scheduleFailure(response))
+        })
     }
 }
