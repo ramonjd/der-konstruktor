@@ -1,6 +1,7 @@
 if (process.env.BROWSER) {
     require('../scss/App.scss')
 }
+import config from '../../config/'
 import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -13,7 +14,7 @@ import Scheduler from '../components/Scheduler'
 import classNames from 'classnames'
 import find from 'lodash/find'
 
-const socket = io.connect('http://localhost:9999')
+const socket = io.connect(config.webServer)
 
 function mapStateToProps(state) {
     const { search, jobs, player } = state
@@ -93,7 +94,6 @@ export default class App extends Component {
         // lodash
         // if so, alert and don't save
         // const match = find(jobs, { 'age': 1, 'active': true });
-
 
         let updatedJob = selectedVideoJob
         updatedJob.schedule = schedule

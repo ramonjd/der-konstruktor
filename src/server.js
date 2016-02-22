@@ -54,8 +54,6 @@ export default function(callback) {
 
     const io = socketIO.listen(httpServer)
 
-
-
     io.sockets.on('connection', (socket) => {
         console.log('socket.io server connection');
         socket.on('schedule.created',  () => {

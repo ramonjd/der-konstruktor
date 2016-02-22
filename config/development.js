@@ -1,3 +1,6 @@
 export const config = {
-    jsScript : 'http://localhost:8888/build/bundle.js'
+    env : 'development',
+    webServer : 'http://localhost:9999',
+    jsScript : 'http://localhost:8888/build/bundle.js',
+    jsonFile : 'json/jobs.json'
 }

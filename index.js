@@ -1,12 +1,3 @@
-/*
-require('babel-register');
-
-if (process.env.ENV === 'development') {
-    require('./webpack/webpack.development.server').default();
-}*/
-
-
-
 require('babel-register');
 var server = require('./src/server');
 server.default(function (app) {

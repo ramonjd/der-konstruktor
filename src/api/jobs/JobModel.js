@@ -1,3 +1,4 @@
+import config from '../../../config/'
 import jsonfile from 'jsonfile'
 import find from 'lodash/find'
 import remove from 'lodash/remove'
@@ -10,12 +11,13 @@ import util from 'util'
 // set up dev and prod paths in config for json file
 // dev in same directory
 // prod in json/json
-let filePath = path.join(__dirname, '../../../json/jobs.json')
+
+let filePath = path.join(__dirname, '../../../' + config.jsonFile)
 const defaultJSON = []
 
 jsonfile.readFile(filePath, function(err, obj) {
     if (err) {
-        jsonfile.writeFile(filePath, defaultJSON, {spaces: 2}, function(err) {
+        jsonfile.writeFile(filePath, defaultJSON, {spaces: 4}, function(err) {
             if (err) {
                 console.error(err)
             } else {
