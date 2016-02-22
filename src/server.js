@@ -3,6 +3,7 @@ import config from '../config/'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
+import path from 'path'
 import compression from 'compression'
 import api from './api/'
 import socketIO from 'socket.io'
@@ -23,11 +24,10 @@ export default function(callback) {
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
     app.use(compression())
-    app.use(express.static('/build'))
 
-/*    if (app.get('env') === 'production') {
-        app.use(express.static(path.join(__dirname, '../build')))
-    }*/
+    if (app.get('env') === 'production') {
+        app.use(express.static(path.join(__dirname, '../build/')))
+    }
 
     api(app)
 
