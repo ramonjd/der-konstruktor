@@ -8,6 +8,9 @@ import SelectList from './SelectList'
 import Checkboxes from './Checkboxes'
 import {timeUnits} from '../constants/'
 import without from 'lodash/without'
+import intersection from 'lodash/intersection'
+import filter from 'lodash/filter'
+import sortedUniq from 'lodash/sortedUniq'
 
 
 let getInitialState = () => {
@@ -16,7 +19,8 @@ let getInitialState = () => {
         hour: timeUnits.HOURS[0].value,
         minute: timeUnits.MINUTES[0].value,
         showError : false,
-        errorText : ''
+        errorText : '',
+        isDisabled : true
     }
 }
 
@@ -39,6 +43,11 @@ export default class Scheduler extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {selectedVideoJob} = nextProps
+
+        this.setState({
+            isDisabled : true
+        })
+
         if (selectedVideoJob && selectedVideoJob.schedule) {
             this.setState({
                 hour : selectedVideoJob.schedule.hour,
@@ -48,6 +57,12 @@ export default class Scheduler extends Component {
         } else {
             this.state = getInitialState()
         }
+
+        this.setState({
+            showError : false,
+            errorText : '',
+            isDisabled : false
+        })
     }
 
     setDays(val, e) {
@@ -57,9 +72,12 @@ export default class Scheduler extends Component {
         } else {
             dayOfWeek = without(dayOfWeek, val)
         }
+        
+        console.log('dayOfWeek', dayOfWeek)
+        
         this.setState({
             dayOfWeek: dayOfWeek.sort()
-        });
+        })
     }
 
     setHour(val) {
@@ -72,8 +90,29 @@ export default class Scheduler extends Component {
 
     scheduleHandler(e) {
         e.preventDefault()
-        const {onSchedule} = this.props
+        const {onSchedule, jobs, selectedVideoJob} = this.props
 
+        if (jobs && jobs.length) {
+            let dupedDay
+            let dupe = filter(jobs, (value)=>{
+                if (selectedVideoJob.id !== value.id && (value.schedule.hour === this.state.hour) && (value.schedule.minute === this.state.minute)) {
+                    let match = intersection(value.schedule.dayOfWeek, this.state.dayOfWeek)
+                    if (match.length) {
+                        dupedDay = match[0]
+                        return true
+                    }
+                }
+                return false
+            })
+
+            if (dupe.length && dupedDay) {
+                this.setState({
+                    showError : true,
+                    errorText : 'Sorry, '+dupe[0].video.snippet.title+' is already scheduled for ' + dupe[0].schedule.hour + ':' + dupe[0].schedule.minute + ' on ' + timeUnits.DAY_MAP[dupedDay]
+                })
+                return false
+            }
+        }
 
 
         if (this.state.dayOfWeek.length === 0) {
@@ -121,7 +160,7 @@ export default class Scheduler extends Component {
                             <span className="divider">:</span>
                             <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes} defaultValue={this.state.minute ? this.state.minute : null }/>
                         </fieldset>
-                        <Button onClick={this.scheduleHandler}>Schedule</Button>
+                        <Button onClick={this.scheduleHandler} disabled={this.state.isDisabled}>Schedule</Button>
                     </div>
                   : null}
             </div>

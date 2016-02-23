@@ -8,6 +8,7 @@ export default class Button extends Component {
     static propTypes = {
         children: PropTypes.node,
         className : PropTypes.string,
+        disabled : PropTypes.bool,
         title : PropTypes.string,
         onClick : PropTypes.func,
         type : PropTypes.string
@@ -17,8 +18,10 @@ export default class Button extends Component {
         let newTitle = this.props.title || ''
         let type = this.props.type || 'Button'
         let onClick = this.props.onClick || (() => {})
+        let disabled = this.props.disabled || false
+
         return (
-            <button type={type} className={newClassName} onClick={onClick} title={newTitle}>{this.props.children}</button>
+            <button type={type} className={newClassName} disabled={disabled} onClick={onClick} title={newTitle}>{this.props.children}</button>
         )
     }
 }

@@ -13,7 +13,6 @@ import Jobs from '../components/Jobs'
 import Player from '../components/Player'
 import Scheduler from '../components/Scheduler'
 import classNames from 'classnames'
-import find from 'lodash/find'
 
 const socket = io.connect(config.webServer)
 
@@ -90,12 +89,6 @@ export default class App extends Component {
     onUpdateScheduleHandler(schedule) {
         const {selectedVideoJob, actions, jobs} = this.props
 
-
-        // check if schedule exists
-        // lodash
-        // if so, alert and don't save
-        // const match = find(jobs, { 'age': 1, 'active': true });
-
         let updatedJob = selectedVideoJob
         updatedJob.schedule = schedule
         if (updatedJob.id) {
@@ -110,7 +103,6 @@ export default class App extends Component {
 
         // should stop video instead of clearing
         actions.unsetVideo()
-
     }
 
     render() {
@@ -134,7 +126,7 @@ export default class App extends Component {
                         </div>
                         <div>
                             <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} unsetVideo={actions.unsetVideo} isScheduled={isScheduled} />
-                            <Scheduler onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob}  isScheduled={isScheduled} />
+                            <Scheduler jobs={jobs} onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob}  isScheduled={isScheduled} />
                         </div>
                         <div>
                             <Search handleSearch={actions.search} isFetching={isFetchingSearchResults}/>
