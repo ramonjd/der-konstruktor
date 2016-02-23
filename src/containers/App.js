@@ -1,6 +1,7 @@
 if (process.env.BROWSER) {
     require('../scss/App.scss')
 }
+
 import config from '../../config/'
 import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'

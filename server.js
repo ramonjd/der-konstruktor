@@ -1,14 +1,14 @@
 /* eslint no-console: 0 */
-import config from '../config/'
+import config from './config/'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import path from 'path'
 import compression from 'compression'
-import api from './api/'
+import api from './src/api/'
 import socketIO from 'socket.io'
 import http from 'http'
-import {registerJobs} from './lib/ScheduleManager'
+import {registerJobs} from './src/lib/ScheduleManager'
 
 // Initialize express server
 export default function(callback) {
@@ -26,14 +26,14 @@ export default function(callback) {
     app.use(compression())
 
     if (app.get('env') === 'production') {
-        app.use(express.static(path.join(__dirname, '../build/')))
+        app.use(express.static(path.join(__dirname, '/build/')))
     }
 
     api(app)
 
     app.get('/*', (req, res) => {
         res.status(200)
-            .render('index',  {jsScript : config.jsScript})
+            .render('index',  {jsScript : config.jsScript, env : config.env})
     })
 
     // Generic server errors (e.g. not caught by components)
