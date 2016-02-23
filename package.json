@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:prod": "npm run test && npm run clean && ./node_modules/webpack/bin/webpack.js -p --progress --bail --config webpack/webpack.production.config.babel.js",
-    "prod": "NODE_ENV=production node index",
+    "prod": "NODE_ENV=production ./node_modules/.bin/forever index.js",
     "dev": "NODE_ENV=development DEBUG=youtubescheduler nodemon index",
     "dev:webpack": "webpack-dev-server --devtool eval --progress --colors --hot --port 9999  --config webpack/webpack.development.config.babel.js",
     "clean": "rm -rf build",
@@ -55,6 +55,7 @@
     "classnames": "^2.2.3",
     "compression": "^1.6.0",
     "express": "^4.13.3",
+    "forever": "^0.15.1",
     "jade": "^1.11.0",
     "jsonfile": "^2.2.3",
     "lodash": "^4.0.0",
