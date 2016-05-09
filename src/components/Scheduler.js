@@ -114,7 +114,6 @@ export default class Scheduler extends Component {
             }
         }
 
-
         if (this.state.dayOfWeek.length === 0) {
             this.setState({
                 showError : true,
