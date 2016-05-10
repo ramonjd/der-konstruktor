@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:production": "npm run test && npm run clean && ./node_modules/webpack/bin/webpack.js -p --progress --bail --config webpack/webpack.production.config.babel.js",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --port 9999  --config webpack/webpack.development.config.babel.js",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --port 3000  --config webpack/webpack.development.config.babel.js",
     "clean": "rm -rf build",
     "test-mocha": "mocha --compilers js:babel-core/register --require ./tests/test_helper.js 'tests/**/*.@(js|jsx)'",
     "test": "npm run test-mocha"
@@ -46,6 +46,7 @@
     "webpack-error-notification": "^0.1.6"
   },
   "dependencies": {
+    "axios": "^0.11.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-redux": "^4.0.6",

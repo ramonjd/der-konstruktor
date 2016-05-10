@@ -6,8 +6,7 @@ import App from './containers/App'
 
 // just for now
 const initialState =  {
-    config : [{}],
-    router : {}
+    config : [{}]
 }
 
 const store = configureStore(initialState)

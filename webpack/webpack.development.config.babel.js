@@ -7,7 +7,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 
 const host = process.env.HOST || 'localhost';
-const port = (process.env.PORT + 1) || 9999;
+const port = (process.env.PORT + 1) || 3000;
 
 const config = {
     devtool: 'source-map',
