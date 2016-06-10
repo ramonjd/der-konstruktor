@@ -24,6 +24,7 @@ export default class Jobs extends Component {
         super(props)
         this.parseSchedule = this.parseSchedule.bind(this)
         this.generateListItemClassName = this.generateListItemClassName.bind(this)
+        this.canJobBeDeleted = this.canJobBeDeleted.bind(this)
     }
 
 
@@ -50,8 +51,14 @@ export default class Jobs extends Component {
         })
     }
 
+    canJobBeDeleted(id){
+        const { selectedVideoJob } = this.props
+        return (selectedVideoJob && selectedVideoJob.video && selectedVideoJob.id === id) ? false : true
+    }
+
     render() {
-        const {data, onDeleteSchedule, onSelectJob} = this.props
+        const {data, onDeleteSchedule, onSelectJob } = this.props
+
         return (
             <div className='Jobs'>
                 <h2>Scheduled Jobs</h2>
@@ -63,7 +70,7 @@ export default class Jobs extends Component {
                                 <div>
                                     <h4>{item.video.snippet.title}</h4>
                                     {this.parseSchedule(item.schedule)}
-                                    <Button onClick={onDeleteSchedule.bind(this, item.id)}>Delete</Button>
+                                    {this.canJobBeDeleted(item.id) ? <Button onClick={onDeleteSchedule.bind(this, item.id)}>Delete</Button> : null }
                                 </div>
                             </li>)
                     }) : null }

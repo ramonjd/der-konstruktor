@@ -4,21 +4,11 @@ import jsonfile from 'jsonfile'
 import path from 'path'
 import map from 'lodash/map'
 
-let filePath = path.join(__dirname, '../../json/jobs.json')
+const filePath = path.join(__dirname, '../../json/jobs.json')
+const cronPattern = '{minute} {hour} * * {dayOfWeek}'
 let scheduledJobs = []
 
-
-
-/*
-
-{
-    cron : '',
-    callback : ()=>{}
-}
-
-*/
-
-export function clearJobs(jobs){
+export function clearJobs(){
     forEach(scheduledJobs, (job) => {
         if (job) {
             job.cancel()
@@ -36,9 +26,9 @@ export function registerJobs(socket){
 
             jsonfile.readFile(filePath, (err, obj) => {
                 if (err) {
-                    console.error(err)
                     reject(err)
                 } else {
+
                     clearJobs()
 
                     let scheduledJobCallback = (job) => {
@@ -51,17 +41,9 @@ export function registerJobs(socket){
 
                     forEach(obj, (job) => {
 
-                        let rule = new schedule.RecurrenceRule()
-                        rule.dayOfWeek = map(job.schedule.dayOfWeek, (item) => {return parseInt(item)})
-                        rule.hour = parseInt(job.schedule.hour)
-                        rule.minute = parseInt(job.schedule.minute)
+                        let rule = cronPattern.replace('{minute}', job.schedule.minute).replace('{hour}', job.schedule.hour).replace('{dayOfWeek}', job.schedule.dayOfWeek.join(','))
+                        let j = schedule.scheduleJob(rule, scheduledJobCallback(job))
 
-                        var j = schedule.scheduleJob(rule, scheduledJobCallback(job))
-
-
-/*
-                        let j = schedule.scheduleJob(job.cron, scheduledJobCallback(job))
-*/
                         scheduledJobs.push(j)
 
                     })

@@ -34,9 +34,7 @@ export default class Checkboxes extends React.Component {
                 nextState[id] = defaultValue && defaultValue.indexOf(item.value) > -1 ? true : false
                 this.setState(nextState)
             })
-
         }
-
     }
 
     handleChange(item, e){

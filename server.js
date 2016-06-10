@@ -19,7 +19,7 @@ export default function(callback) {
     app.set('host', process.env.HOST || 'localhost')
     app.set('port', process.env.PORT || 9999)
     app.set('views', './src/views')
-    app.set('view engine', 'jade')
+    app.set('view engine', 'pug')
     app.use(morgan(app.get('env') === 'production' ? 'combined' : 'development'))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())

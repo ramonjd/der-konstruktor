@@ -33,7 +33,6 @@ const JobsController  = {
         });
     },
     deleteJobById(req, res, next) {
-        console.log('deleteJobById', req.params.id);
         JobModel.
         findByIdAndRemove(req.params.id, (err, data) => {
             if (!err) {

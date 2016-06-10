@@ -56,14 +56,12 @@ export default class Player extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {isScheduled} = nextProps
-        console.log('Player componentWillReceiveProps isScheduled', isScheduled)
         if (isScheduled === true) {
             this.setState(getLargePlayBackState())
         }
     }
 
     handlePlayVideo(e) {
-        console.log('VIDEO PLAY')
         const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'playing'
@@ -72,7 +70,6 @@ export default class Player extends Component {
     }
 
     handlePauseVideo(e) {
-        console.log('VIDEO PAUSED')
         const {setIsPlaying} = this.props
         this.setState({
             playbackState: 'paused'
@@ -81,7 +78,6 @@ export default class Player extends Component {
     }
 
     handleStopVideo(e) {
-        console.log('VIDEO STOP')
         const {setIsPlaying, isScheduled, unsetVideo} = this.props
         this.setState({
             playbackState: 'stopped'

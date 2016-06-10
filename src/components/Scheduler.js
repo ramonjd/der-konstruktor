@@ -10,6 +10,7 @@ import {timeUnits} from '../constants/'
 import without from 'lodash/without'
 import intersection from 'lodash/intersection'
 import filter from 'lodash/filter'
+import uniq from 'lodash/uniq'
 import sortedUniq from 'lodash/sortedUniq'
 
 
@@ -66,15 +67,15 @@ export default class Scheduler extends Component {
     }
 
     setDays(val, e) {
-        let dayOfWeek = this.state.dayOfWeek
+        // just to make sure we're unique
+        let dayOfWeek = uniq(this.state.dayOfWeek)
+
         if (e.target.checked === true) {
             dayOfWeek.push(parseInt(val))
         } else {
             dayOfWeek = without(dayOfWeek, val)
         }
-        
-        console.log('dayOfWeek', dayOfWeek)
-        
+
         this.setState({
             dayOfWeek: dayOfWeek.sort()
         })
@@ -140,7 +141,7 @@ export default class Scheduler extends Component {
         })
     }
     render() {
-        const {selectedVideoJob, isScheduled} = this.props
+        const {selectedVideoJob, isScheduled, onCloseScheduler } = this.props
         const titleText = selectedVideoJob && selectedVideoJob.schedule ? 'Reschedule this video' : 'Schedule this video'
         const errorClass = this.state.showError === true ? 'error active' : 'error'
         return (
@@ -160,6 +161,7 @@ export default class Scheduler extends Component {
                             <SelectList options={timeUnits.MINUTES} onChange={this.setMinutes} defaultValue={this.state.minute ? this.state.minute : null }/>
                         </fieldset>
                         <Button onClick={this.scheduleHandler} disabled={this.state.isDisabled}>Schedule</Button>
+                        <Button onClick={onCloseScheduler}>Cancel</Button>
                     </div>
                   : null}
             </div>

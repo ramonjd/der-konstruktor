@@ -4,7 +4,7 @@ import find from 'lodash/find'
 import remove from 'lodash/remove'
 import each from 'lodash/each'
 import sortBy from 'lodash/sortBy'
-import merge from 'lodash/merge'
+import extend from 'lodash/extend'
 import path from 'path'
 import util from 'util'
 
@@ -74,7 +74,7 @@ export default class JobModel {
             } else {
                 each(obj, (o) => {
                     if (o.id === id) {
-                        merge(o, data)
+                        extend(o, data)
                     }
                 })
                 jsonfile.writeFile(filePath, obj,  (err) => {
@@ -96,7 +96,6 @@ export default class JobModel {
             if (err) {
                 callback(err)
             } else {
-                console.log('findByIdAndRemove', id);
 
                 remove(obj, (o) => {
                     return o.id === id
@@ -106,8 +105,6 @@ export default class JobModel {
                     if (err) {
                         callback(err)
                     }else {
-                        console.log('findByIdAndRemove jsonfile.writeFile', obj);
-
                         callback(null, {
                             jobs : sortBy(obj, (o) => { return o.created }),
                             lastUpdatedId : id

@@ -55,6 +55,8 @@ export default class App extends Component {
         this.onSelectVideoHandler = this.onSelectVideoHandler.bind(this)
         this.onSelectJobHandler = this.onSelectJobHandler.bind(this)
         this.onUpdateScheduleHandler = this.onUpdateScheduleHandler.bind(this)
+        this.onCloseScheduledVideo = this.onCloseScheduledVideo.bind(this)
+        this.onDeleteSchedule = this.onDeleteSchedule.bind(this)
     }
 
     componentWillMount() {
@@ -65,7 +67,7 @@ export default class App extends Component {
         })
 
         socket.on('schedule.count',  (data) => {
-            console.log(data);
+            // console.log(data);
         })
 
         socket.on('schedule.trigger',  (data) => {
@@ -83,6 +85,7 @@ export default class App extends Component {
 
     onSelectJobHandler(jobData){
         const {actions} = this.props
+        this.onCloseScheduledVideo()
         actions.setVideo(jobData)
     }
 
@@ -91,6 +94,8 @@ export default class App extends Component {
 
         let updatedJob = selectedVideoJob
         updatedJob.schedule = schedule
+
+
         if (updatedJob.id) {
             actions.updateJob(updatedJob.id, updatedJob, (id)=> {
                 socket.emit('schedule.created')
@@ -102,7 +107,18 @@ export default class App extends Component {
         }
 
         // should stop video instead of clearing
+        this.onCloseScheduledVideo()
+    }
+
+    onCloseScheduledVideo() {
+        const { actions } = this.props
+        actions.setIsPlaying(false)
         actions.unsetVideo()
+    }
+
+    onDeleteSchedule(id){
+        const { actions  } = this.props
+        actions.deleteJobByVideoId(id)
     }
 
     render() {
@@ -118,15 +134,16 @@ export default class App extends Component {
             <div className={appClassName}>
                 <header>
                     <h1>{mainTitle}</h1>
+                {isScheduled ? <button className='closeVideo' onClick={this.onCloseScheduledVideo}>Close Video</button> : null }
                 </header>
                 <main>
                     <section className='flex'>
                         <div>
-                            <Jobs data={jobs} lastUpdatedId={lastUpdatedId} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={actions.deleteJobByVideoId} />
+                            <Jobs data={jobs} isPlayingVideo={isPlayingVideo} lastUpdatedId={lastUpdatedId} selectedVideoJob={selectedVideoJob} isFetching={isFetchingJobs} onSelectJob={this.onSelectJobHandler} onDeleteSchedule={this.onDeleteSchedule} />
                         </div>
                         <div>
                             <Player selectedVideoJob={selectedVideoJob} setIsPlaying={actions.setIsPlaying} unsetVideo={actions.unsetVideo} isScheduled={isScheduled} />
-                            <Scheduler jobs={jobs} onSchedule={this.onUpdateScheduleHandler} selectedVideoJob={selectedVideoJob}  isScheduled={isScheduled} />
+                            <Scheduler jobs={jobs} onSchedule={this.onUpdateScheduleHandler} onCloseScheduler={this.onCloseScheduledVideo} selectedVideoJob={selectedVideoJob}  isScheduled={isScheduled} />
                         </div>
                         <div>
                             <Search handleSearch={actions.search} isFetching={isFetchingSearchResults}/>
